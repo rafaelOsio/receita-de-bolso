@@ -24,4 +24,8 @@ public class ReceitasFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_receitas, container, false);
     }
 
+    public static ReceitasFragment newInstance() {
+        return new ReceitasFragment();
+    }
+
 }

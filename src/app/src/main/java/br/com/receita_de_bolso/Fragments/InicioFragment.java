@@ -24,4 +24,8 @@ public class InicioFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_inicio, container, false);
     }
 
+    public static InicioFragment newInstance() {
+        return new InicioFragment();
+    }
+
 }

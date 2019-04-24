@@ -19,4 +19,8 @@ public class CategoriasFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_categorias, container, false);
     }
+
+    public static CategoriasFragment newInstance() {
+        return new CategoriasFragment();
+    }
 }
