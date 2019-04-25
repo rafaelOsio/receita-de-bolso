@@ -1,31 +1,32 @@
 package br.com.receita_de_bolso.Domain;
 
 public class Categoria {
-    private Long Id;
-    private String Nome;
-    private String Descricao;
+
+    private Long id;
+    private String nome;
+    private String descricao;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getNome() {
-        return Nome;
+        return nome;
     }
 
     public void setNome(String nome) {
-        Nome = nome;
+        this.nome = nome;
     }
 
     public String getDescricao() {
-        return Descricao;
+        return descricao;
     }
 
     public void setDescricao(String descricao) {
-        Descricao = descricao;
+        this.descricao = descricao;
     }
 }

@@ -42,16 +42,16 @@ public class CategoriaFormActivity extends AppCompatActivity {
 
     private Categoria GetByNome(String nome) {
         CategoriaDAO categoriaDAO = new CategoriaDAO(getBaseContext());
-        return categoriaDAO.GetByNome(nome);
+        return categoriaDAO.getByNome(nome);
     }
 
     private void Post(Categoria categoria) {
         CategoriaDAO categoriaDAO = new CategoriaDAO(getBaseContext());
-        categoriaDAO.Post(categoria);
+        categoriaDAO.insert(categoria);
     }
 
     private void Put(Categoria categoria) {
         CategoriaDAO categoriaDAO = new CategoriaDAO(getBaseContext());
-        categoriaDAO.Put(categoria);
+        categoriaDAO.update(categoria);
     }
 }

@@ -25,7 +25,7 @@ public class CategoriaDAO {
         banco = new DBHelper(context);
     }
 
-    public long Post(Categoria categoria) {
+    public long insert(Categoria categoria) {
         ContentValues valores = new ContentValues();
         db = banco.getWritableDatabase();
 
@@ -42,7 +42,7 @@ public class CategoriaDAO {
             return resultado;
     }
 
-    public int Put(Categoria categoria){
+    public int update(Categoria categoria){
         ContentValues valores = new ContentValues();
         db = banco.getWritableDatabase();
 
@@ -57,7 +57,7 @@ public class CategoriaDAO {
         return response;
     }
 
-    public Boolean Delete(Long id) {
+    public Boolean delete(Long id) {
         db = banco.getWritableDatabase();
         String where = ID + "=" + id;
 
@@ -68,11 +68,11 @@ public class CategoriaDAO {
     }
 
 
-    public List<Categoria> GetAll() {
+    public ArrayList<Categoria> getAll() {
         db = banco.getReadableDatabase();
 
         Cursor cursor = db.query(TABELA, new String[] { ID, NOME, DESCRICAO}, null,null,null,null,null);
-        List<Categoria> result = new ArrayList<>();
+        ArrayList<Categoria> result = new ArrayList<>();
 
         if (cursor.moveToFirst()){
             do{
@@ -89,7 +89,7 @@ public class CategoriaDAO {
         return result;
     }
 
-    public Categoria GetById(Long id) {
+    public Categoria getById(Long id) {
 
         String where = ID + "=" + id;
         db = banco.getReadableDatabase();
@@ -112,7 +112,7 @@ public class CategoriaDAO {
 
     }
 
-    public Categoria GetByNome(String nome) {
+    public Categoria getByNome(String nome) {
 
         String where = NOME + "=" + nome;
         db = banco.getReadableDatabase();
