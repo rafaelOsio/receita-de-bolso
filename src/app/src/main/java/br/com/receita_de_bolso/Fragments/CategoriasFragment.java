@@ -21,5 +21,8 @@ public class CategoriasFragment extends Fragment {
     }
 
 
+    public static CategoriasFragment newInstance() {
+        return new CategoriasFragment();
+    }
 
 }
