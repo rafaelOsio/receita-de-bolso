@@ -2,7 +2,11 @@ package br.com.receita_de_bolso.DAO;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.receita_de_bolso.Database.DBHelper;
 import br.com.receita_de_bolso.Domain.Categoria;
@@ -21,8 +25,7 @@ public class CategoriaDAO {
         banco = new DBHelper(context);
     }
 
-    //Retorna o ID da categoria inserida
-    public long Add(Categoria categoria) {
+    public long Post(Categoria categoria) {
         ContentValues valores = new ContentValues();
         db = banco.getWritableDatabase();
 
@@ -54,6 +57,81 @@ public class CategoriaDAO {
         return response;
     }
 
+    public Boolean Delete(Long id) {
+        db = banco.getWritableDatabase();
+        String where = ID + "=" + id;
+
+        Boolean response = db.delete(TABELA, where, null) > 0;
+        db.close();
+
+        return response;
+    }
 
 
+    public List<Categoria> GetAll() {
+        db = banco.getReadableDatabase();
+
+        Cursor cursor = db.query(TABELA, new String[] { ID, NOME, DESCRICAO}, null,null,null,null,null);
+        List<Categoria> result = new ArrayList<>();
+
+        if (cursor.moveToFirst()){
+            do{
+                Categoria categoria = new Categoria();
+                categoria.setId(cursor.getLong(cursor.getColumnIndex(ID)));
+
+                result.add(categoria);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+        cursor.close();
+
+        return result;
+    }
+
+    public Categoria GetById(Long id) {
+
+        String where = ID + "=" + id;
+        db = banco.getReadableDatabase();
+        Cursor cursor = db.query(TABELA,new String[] {ID, NOME, DESCRICAO}, where,null,null,null,null);
+
+        if(cursor.moveToFirst()){
+
+            Categoria categoria = new Categoria();
+            categoria.setId(cursor.getLong(cursor.getColumnIndex(ID)));
+            categoria.setNome(cursor.getString(cursor.getColumnIndex(NOME)));
+            categoria.setDescricao(cursor.getString(cursor.getColumnIndex(DESCRICAO)));
+
+            db.close();
+
+            return categoria;
+        }
+
+        db.close();
+        return null;
+
+    }
+
+    public Categoria GetByNome(String nome) {
+
+        String where = NOME + "=" + nome;
+        db = banco.getReadableDatabase();
+        Cursor cursor = db.query(TABELA,new String[] {ID, NOME, DESCRICAO}, where,null,null,null,null);
+
+        if(cursor.moveToFirst()){
+
+            Categoria categoria = new Categoria();
+            categoria.setId(cursor.getLong(cursor.getColumnIndex(ID)));
+            categoria.setNome(cursor.getString(cursor.getColumnIndex(NOME)));
+            categoria.setDescricao(cursor.getString(cursor.getColumnIndex(DESCRICAO)));
+
+            db.close();
+
+            return categoria;
+        }
+
+        db.close();
+        return null;
+
+    }
 }
