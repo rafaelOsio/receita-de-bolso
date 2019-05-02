@@ -1,14 +1,21 @@
 package br.com.receita_de_bolso.Fragments;
 
+import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -16,13 +23,20 @@ import br.com.receita_de_bolso.Adapters.CategoriaAdapter;
 import br.com.receita_de_bolso.DAO.CategoriaDAO;
 import br.com.receita_de_bolso.Domain.Categoria;
 import br.com.receita_de_bolso.R;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class CategoriasFragment extends Fragment {
+
+    Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_categorias, container, false);
+        View view = inflater.inflate(R.layout.fragment_categorias, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
@@ -54,4 +68,55 @@ public class CategoriasFragment extends Fragment {
         return new CategoriasFragment();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @OnClick(R.id.btn_add_category)
+    public void onViewClicked() {
+        AlertDialog.Builder addCategoryDialog = new AlertDialog.Builder(getActivity());
+        View addCategoryView = getLayoutInflater().inflate(R.layout.add_category_dialog, null);
+
+        EditText categoryName = (EditText) addCategoryView.findViewById(R.id.category_name_field);
+        EditText categoryDescription = (EditText) addCategoryView.findViewById(R.id.category_description_field);
+        Button addCategory = (Button) addCategoryView.findViewById(R.id.btn_save_category);
+        Button btnCancel = (Button) addCategoryView.findViewById(R.id.btn_cancel);
+
+        Categoria categoria = new Categoria();
+        categoria.setNome(categoryName.getText().toString());
+        categoria.setDescricao(categoryDescription.getText().toString());
+
+        addCategoryDialog.setView(addCategoryView);
+        AlertDialog dialog = addCategoryDialog.create();
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dialog.hide();
+            }
+        });
+
+        addCategory.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (!categoryName.getText().toString().isEmpty() && !categoryDescription.getText().toString().isEmpty()) {
+                    CategoriaDAO categoriaDAO = new CategoriaDAO(getContext());
+                    Categoria verifyCategory = categoriaDAO.getByNome(categoryName.getText().toString());
+                    if (verifyCategory == null) {
+                        categoriaDAO.insert(categoria);
+                        dialog.hide();
+                    } else {
+                        Toast.makeText(getActivity(), "Essa categoria já existe!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        dialog.show();
+    }
 }

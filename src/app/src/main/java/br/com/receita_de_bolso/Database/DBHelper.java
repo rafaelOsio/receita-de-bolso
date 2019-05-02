@@ -18,7 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         //Tabela categorias
-        db.execSQL("create table " + CategoriaDAO.TABELA + " ( " + CategoriaDAO.ID + " integer primary key autoincrement, "  + CategoriaDAO.NOME + " varchar(100) not null, " + CategoriaDAO.DESCRICAO + " varchar(100), unique(" + CategoriaDAO.NOME + "));");
+        db.execSQL("create table " + CategoriaDAO.TABELA + " ( " + CategoriaDAO.ID + " integer primary key autoincrement, "  + CategoriaDAO.NOME + " varchar(100) not null, " + CategoriaDAO.DESCRICAO + " varchar(100), " + CategoriaDAO.NOME + ");");
     }
 
     @Override

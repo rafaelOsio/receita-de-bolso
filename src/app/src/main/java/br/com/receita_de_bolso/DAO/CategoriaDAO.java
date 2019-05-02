@@ -109,14 +109,13 @@ public class CategoriaDAO {
 
         db.close();
         return null;
-
     }
 
     public Categoria getByNome(String nome) {
 
-        String where = NOME + "=" + nome;
+        String where = NOME + " = ' " + nome + " ' ";
         db = banco.getReadableDatabase();
-        Cursor cursor = db.query(TABELA,new String[] {ID, NOME, DESCRICAO}, where,null,null,null,null);
+        Cursor cursor = db.query(TABELA,new String[] {ID, NOME, DESCRICAO}, where ,null,null,null,null);
 
         if(cursor.moveToFirst()){
 
@@ -132,6 +131,5 @@ public class CategoriaDAO {
 
         db.close();
         return null;
-
     }
 }
