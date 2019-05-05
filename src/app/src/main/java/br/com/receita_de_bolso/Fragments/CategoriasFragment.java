@@ -30,6 +30,7 @@ import butterknife.Unbinder;
 public class CategoriasFragment extends Fragment {
 
     Unbinder unbinder;
+    CategoriaAdapter categoriaAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +43,7 @@ public class CategoriasFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        this.categoriaAdapter = new CategoriaAdapter(getContext(), new ArrayList<Categoria>());
         setupRecyclerViewCategorias();
     }
 
@@ -50,7 +51,6 @@ public class CategoriasFragment extends Fragment {
 
         RecyclerView recyclerViewCategorias = getActivity().findViewById(R.id.categorias_recyclerview);
         LinearLayoutManager linearLayoutManagerCategorias = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        CategoriaAdapter categoriaAdapter = new CategoriaAdapter(getContext(), new ArrayList<Categoria>());
 
         recyclerViewCategorias.setLayoutManager(linearLayoutManagerCategorias);
         recyclerViewCategorias.setAdapter(categoriaAdapter);
@@ -106,6 +106,7 @@ public class CategoriasFragment extends Fragment {
                     Categoria verifyCategory = categoriaDAO.getByNome(categoryName.getText().toString());
                     if (verifyCategory == null) {
                         categoriaDAO.insert(categoria);
+                        categoriaAdapter.setItems(categoriaDAO.getAll());
                         dialog.hide();
                     } else {
                         Toast.makeText(getActivity(), "Essa categoria já existe!", Toast.LENGTH_SHORT).show();
