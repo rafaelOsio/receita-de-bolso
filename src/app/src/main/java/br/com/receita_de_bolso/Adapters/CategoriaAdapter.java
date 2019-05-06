@@ -58,43 +58,38 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaViewHolder> 
         categoriaViewHolder.nome.setText(this.categorias.get(i).getNome());
         categoriaViewHolder.descricao.setText(this.categorias.get(i).getDescricao());
         viewBinderHelper.bind(categoriaViewHolder.swipeRevealLayout, this.categorias.get(i).getNome());
-        categoriaViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                categoriaDAO.delete(categorias.get(i).getId());
-                categoriaViewHolder.swipeRevealLayout.close(true);
-                setItems(categoriaDAO.getAll());
-            }
+
+        categoriaViewHolder.btnDelete.setOnClickListener(v -> {
+            categoriaDAO.delete(categorias.get(i).getId());
+            categoriaViewHolder.swipeRevealLayout.close(true);
+            setItems(categoriaDAO.getAll());
         });
 
-        categoriaViewHolder.btnEdit.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                AlertDialog.Builder addCategoryDialog = new AlertDialog.Builder(context);
-                View addCategoryView = LayoutInflater.from(context).inflate(R.layout.add_category_dialog, null);
+        categoriaViewHolder.btnEdit.setOnClickListener(v -> {
+            AlertDialog.Builder addCategoryDialog = new AlertDialog.Builder(context);
+            View addCategoryView = LayoutInflater.from(context).inflate(R.layout.add_category_dialog, null);
 
-                TextView title = (TextView) addCategoryView.findViewById(R.id.txt_view_title);
-                EditText categoryName = (EditText) addCategoryView.findViewById(R.id.category_name_field);
-                EditText categoryDescription = (EditText) addCategoryView.findViewById(R.id.category_description_field);
-                Button addCategory = (Button) addCategoryView.findViewById(R.id.btn_save_category);
-                Button btnCancel = (Button) addCategoryView.findViewById(R.id.btn_cancel);
+            TextView title = addCategoryView.findViewById(R.id.txt_view_title);
+            EditText categoryName = addCategoryView.findViewById(R.id.category_name_field);
+            EditText categoryDescription = addCategoryView.findViewById(R.id.category_description_field);
+            Button addCategory = addCategoryView.findViewById(R.id.btn_save_category);
+            Button btnCancel = addCategoryView.findViewById(R.id.btn_cancel);
 
-                title.setText("Editar categoria");
-                categoryName.setText(categorias.get(i).getNome());
-                categoryDescription.setText(categorias.get(i).getDescricao());
+            title.setText("Editar categoria");
+            categoryName.setText(categorias.get(i).getNome());
+            categoryDescription.setText(categorias.get(i).getDescricao());
 
 
-                addCategoryDialog.setView(addCategoryView);
-                AlertDialog dialog = addCategoryDialog.create();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            addCategoryDialog.setView(addCategoryView);
+            AlertDialog dialog = addCategoryDialog.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                btnCancel.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        categoriaViewHolder.swipeRevealLayout.close(true);
-                        dialog.hide();
-                    }
-                });
+            btnCancel.setOnClickListener(v1 -> {
+                categoriaViewHolder.swipeRevealLayout.close(true);
+                dialog.hide();
+            });
 
-                dialog.show();
-            }
+            dialog.show();
         });
     }
 

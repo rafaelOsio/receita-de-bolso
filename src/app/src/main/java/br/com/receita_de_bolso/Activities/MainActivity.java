@@ -22,8 +22,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        navigationView = (BottomNavigationView) findViewById(R.id.navigationView);
+        navigationView = findViewById(R.id.navigationView);
         navigationView.setOnNavigationItemSelectedListener(this);
+
+        Fragment inicioFragment = InicioFragment.newInstance();
+        openFragment(inicioFragment);
     }
 
     @Override
@@ -31,19 +34,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         switch (item.getItemId()) {
             case R.id.navigation_home: {
-                getSupportActionBar().setTitle("Início");
+                //getSupportActionBar().setTitle("Início");
                 Fragment inicioFragment = InicioFragment.newInstance();
                 openFragment(inicioFragment);
                 break;
             }
             case R.id.navigation_recipes: {
-                getSupportActionBar().setTitle("Receitas");
+                //getSupportActionBar().setTitle("Receitas");
                 Fragment receitasFragment = ReceitasFragment.newInstance();
                 openFragment(receitasFragment);
                 break;
             }
             case R.id.navigation_categories: {
-                getSupportActionBar().setTitle("Categorias");
+                //getSupportActionBar().setTitle("Categorias");
                 Fragment categoriasFragment = CategoriasFragment.newInstance();
                 openFragment(categoriasFragment);
                 break;

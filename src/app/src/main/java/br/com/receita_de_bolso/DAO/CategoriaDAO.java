@@ -78,6 +78,8 @@ public class CategoriaDAO {
             do{
                 Categoria categoria = new Categoria();
                 categoria.setId(cursor.getLong(cursor.getColumnIndex(ID)));
+                categoria.setNome(cursor.getString(cursor.getColumnIndex(NOME)));
+                categoria.setDescricao(cursor.getString(cursor.getColumnIndex(DESCRICAO)));
 
                 result.add(categoria);
             } while (cursor.moveToNext());
@@ -113,7 +115,7 @@ public class CategoriaDAO {
 
     public Categoria getByNome(String nome) {
 
-        String where = NOME + " = ' " + nome + " ' ";
+        String where = NOME + " = '" + nome + "' ";
         db = banco.getReadableDatabase();
         Cursor cursor = db.query(TABELA,new String[] {ID, NOME, DESCRICAO}, where ,null,null,null,null);
 

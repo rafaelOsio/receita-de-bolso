@@ -43,7 +43,7 @@ public class CategoriasFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.categoriaAdapter = new CategoriaAdapter(getContext(), new ArrayList<Categoria>());
+        this.categoriaAdapter = new CategoriaAdapter(getContext(), new ArrayList<>());
         setupRecyclerViewCategorias();
     }
 
@@ -79,41 +79,39 @@ public class CategoriasFragment extends Fragment {
         AlertDialog.Builder addCategoryDialog = new AlertDialog.Builder(getActivity());
         View addCategoryView = getLayoutInflater().inflate(R.layout.add_category_dialog, null);
 
-        EditText categoryName = (EditText) addCategoryView.findViewById(R.id.category_name_field);
-        EditText categoryDescription = (EditText) addCategoryView.findViewById(R.id.category_description_field);
-        Button addCategory = (Button) addCategoryView.findViewById(R.id.btn_save_category);
-        Button btnCancel = (Button) addCategoryView.findViewById(R.id.btn_cancel);
-
-        Categoria categoria = new Categoria();
-        categoria.setNome(categoryName.getText().toString());
-        categoria.setDescricao(categoryDescription.getText().toString());
+        EditText categoryName = addCategoryView.findViewById(R.id.category_name_field);
+        EditText categoryDescription = addCategoryView.findViewById(R.id.category_description_field);
+        Button addCategory = addCategoryView.findViewById(R.id.btn_save_category);
+        Button btnCancel = addCategoryView.findViewById(R.id.btn_cancel);
 
         addCategoryDialog.setView(addCategoryView);
         AlertDialog dialog = addCategoryDialog.create();
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dialog.hide();
-            }
-        });
+        btnCancel.setOnClickListener(v -> dialog.hide());
 
-        addCategory.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (!categoryName.getText().toString().isEmpty() && !categoryDescription.getText().toString().isEmpty()) {
-                    CategoriaDAO categoriaDAO = new CategoriaDAO(getContext());
-                    Categoria verifyCategory = categoriaDAO.getByNome(categoryName.getText().toString());
-                    if (verifyCategory == null) {
-                        categoriaDAO.insert(categoria);
-                        categoriaAdapter.setItems(categoriaDAO.getAll());
-                        dialog.hide();
-                    } else {
-                        Toast.makeText(getActivity(), "Essa categoria já existe!", Toast.LENGTH_SHORT).show();
-                    }
+        addCategory.setOnClickListener(v -> {
+
+            Categoria categoria = new Categoria();
+            categoria.setNome(categoryName.getText().toString());
+            categoria.setDescricao(categoryDescription.getText().toString());
+
+            if (!categoria.getNome().isEmpty() && !categoria.getDescricao().isEmpty()) {
+
+                CategoriaDAO categoriaDAO = new CategoriaDAO(getContext());
+                Categoria verifyCategory = categoriaDAO.getByNome(categoria.getNome());
+
+                if (verifyCategory == null) {
+                    categoriaDAO.insert(categoria);
+                    categoriaAdapter.setItems(categoriaDAO.getAll());
+                    dialog.hide();
                 } else {
-                    Toast.makeText(getActivity(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Essa categoria já existe!", Toast.LENGTH_SHORT).show();
                 }
+
+            } else {
+                Toast.makeText(getActivity(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
             }
         });
 
