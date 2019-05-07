@@ -9,7 +9,7 @@ public class Receita {
     private String nome;
     private int tempoPreparo;
     private int rendimento;
-    private String ingridientes;
+    private String ingredientes;
     private String modoPreparo;
     private Date ultimoAcesso;
 
@@ -69,12 +69,12 @@ public class Receita {
         this.rendimento = rendimento;
     }
 
-    public String getIngridientes() {
-        return ingridientes;
+    public String getIngredientes() {
+        return ingredientes;
     }
 
-    public void setIngridientes(String ingridientes) {
-        this.ingridientes = ingridientes;
+    public void setIngredientes(String ingredientes) {
+        this.ingredientes = ingredientes;
     }
 
     public String getModoPreparo() {

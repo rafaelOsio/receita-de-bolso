@@ -2,12 +2,8 @@ package br.com.receita_de_bolso.Adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -59,6 +56,35 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaViewHolder> 
         categoriaViewHolder.descricao.setText(this.categorias.get(i).getDescricao());
         viewBinderHelper.bind(categoriaViewHolder.swipeRevealLayout, this.categorias.get(i).getNome());
 
+        categoriaViewHolder.swipeRevealLayout.setSwipeListener( new SwipeRevealLayout.SwipeListener() {
+            @Override
+            public void onClosed(SwipeRevealLayout view) {
+                categoriaViewHolder.arrow.setRotation(0);
+            }
+
+            @Override
+            public void onOpened(SwipeRevealLayout view) {
+                categoriaViewHolder.arrow.setRotation(180);
+            }
+
+            @Override
+            public void onSlide(SwipeRevealLayout view, float slideOffset) {
+                categoriaViewHolder.arrow.setRotation(slideOffset * 180);
+            }
+        });
+
+
+        categoriaViewHolder.arrow.setOnClickListener(v -> {
+            if (categoriaViewHolder.swipeRevealLayout.isOpened()) {
+                categoriaViewHolder.swipeRevealLayout.close(true);
+                categoriaViewHolder.arrow.setRotation(180);
+            }
+            else {
+                categoriaViewHolder.swipeRevealLayout.open(true);
+                categoriaViewHolder.arrow.setRotation(0);
+            }
+        });
+
         categoriaViewHolder.btnDelete.setOnClickListener(v -> {
             categoriaDAO.delete(categorias.get(i).getId());
             categoriaViewHolder.swipeRevealLayout.close(true);
@@ -75,10 +101,10 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaViewHolder> 
             Button addCategory = addCategoryView.findViewById(R.id.btn_save_category);
             Button btnCancel = addCategoryView.findViewById(R.id.btn_cancel);
 
+            addCategory.setText("Salvar");
             title.setText("Editar categoria");
             categoryName.setText(categorias.get(i).getNome());
             categoryDescription.setText(categorias.get(i).getDescricao());
-
 
             addCategoryDialog.setView(addCategoryView);
             AlertDialog dialog = addCategoryDialog.create();
@@ -86,6 +112,17 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaViewHolder> 
 
             btnCancel.setOnClickListener(v1 -> {
                 categoriaViewHolder.swipeRevealLayout.close(true);
+                dialog.hide();
+            });
+
+            addCategory.setOnClickListener(v2 -> {
+                Categoria categoria = new Categoria();
+                categoria.setDescricao(categoryDescription.getText().toString());
+                categoria.setNome(categoryName.getText().toString());
+                categoria.setId(categorias.get(i).getId());
+                categoriaDAO.update(categoria);
+                categoriaViewHolder.swipeRevealLayout.close(true);
+                setItems(categoriaDAO.getAll());
                 dialog.hide();
             });
 
