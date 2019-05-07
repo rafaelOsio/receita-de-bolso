@@ -21,7 +21,7 @@ public class ReceitaDAO {
     public static String NOME = "nome";
     public static String TEMPO_PREPARO= "tempo_preparo";
     public static String RENDIMENTO = "rendimento";
-    public static String INGRIDIENTES = "ingridientes";
+    public static String INGREDIENTES = "ingredientes";
     public static String MODO_PREPARO = "modo_preparo";
 
     public ReceitaDAO(Context context){
@@ -37,7 +37,7 @@ public class ReceitaDAO {
         valores.put(NOME, receita.getNome());
         valores.put(TEMPO_PREPARO, receita.getTempoPreparo());
         valores.put(RENDIMENTO, receita.getRendimento());
-        valores.put(INGRIDIENTES, receita.getIngridientes());
+        valores.put(INGREDIENTES, receita.getIngredientes());
         valores.put(MODO_PREPARO, receita.getModoPreparo());
 
         long resultado = db.insert(TABELA, null, valores);
@@ -61,7 +61,7 @@ public class ReceitaDAO {
         valores.put(NOME, receita.getNome());
         valores.put(TEMPO_PREPARO, receita.getTempoPreparo());
         valores.put(RENDIMENTO, receita.getRendimento());
-        valores.put(INGRIDIENTES, receita.getIngridientes());
+        valores.put(INGREDIENTES, receita.getIngredientes());
         valores.put(MODO_PREPARO, receita.getModoPreparo());
 
         int response = db.update(TABELA, valores, where,null);
@@ -84,7 +84,7 @@ public class ReceitaDAO {
     public ArrayList<Receita> getAll() {
         db = banco.getReadableDatabase();
 
-        Cursor cursor = db.query(TABELA, new String[] { ID, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGRIDIENTES, MODO_PREPARO}, null,null,null,null,null);
+        Cursor cursor = db.query(TABELA, new String[] { ID, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO}, null,null,null,null,null);
         ArrayList<Receita> result = new ArrayList<>();
 
         if (cursor.moveToFirst()){
@@ -95,7 +95,7 @@ public class ReceitaDAO {
                 receita.setCategoriaId(cursor.getLong(cursor.getColumnIndex(CATEGORIA_ID)));
                 receita.setTempoPreparo(cursor.getInt(cursor.getColumnIndex(TEMPO_PREPARO)));
                 receita.setRendimento(cursor.getInt(cursor.getColumnIndex(RENDIMENTO)));
-                receita.setIngridientes(cursor.getString(cursor.getColumnIndex(INGRIDIENTES)));
+                receita.setIngredientes(cursor.getString(cursor.getColumnIndex(INGREDIENTES)));
                 receita.setModoPreparo(cursor.getString(cursor.getColumnIndex(MODO_PREPARO)));
 
                 result.add(receita);
@@ -112,7 +112,7 @@ public class ReceitaDAO {
 
         String where = ID + "=" + id;
         db = banco.getReadableDatabase();
-        Cursor cursor = db.query(TABELA, new String[] { ID, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGRIDIENTES, MODO_PREPARO}, where, null,null,null,null,null);
+        Cursor cursor = db.query(TABELA, new String[] { ID, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO}, where, null,null,null,null,null);
 
         if(cursor.moveToFirst()){
 
@@ -122,7 +122,7 @@ public class ReceitaDAO {
             receita.setCategoriaId(cursor.getLong(cursor.getColumnIndex(CATEGORIA_ID)));
             receita.setTempoPreparo(cursor.getInt(cursor.getColumnIndex(TEMPO_PREPARO)));
             receita.setRendimento(cursor.getInt(cursor.getColumnIndex(RENDIMENTO)));
-            receita.setIngridientes(cursor.getString(cursor.getColumnIndex(INGRIDIENTES)));
+            receita.setIngredientes(cursor.getString(cursor.getColumnIndex(INGREDIENTES)));
             receita.setModoPreparo(cursor.getString(cursor.getColumnIndex(MODO_PREPARO)));
 
             db.close();

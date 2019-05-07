@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import br.com.receita_de_bolso.Activities.MainActivity;
 import br.com.receita_de_bolso.Adapters.CategoriaAdapter;
 import br.com.receita_de_bolso.DAO.CategoriaDAO;
 import br.com.receita_de_bolso.Domain.Categoria;
@@ -35,6 +36,7 @@ public class CategoriasFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).updateStatusBarColor("#fafafa");
         View view = inflater.inflate(R.layout.fragment_categorias, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;

@@ -22,6 +22,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_marginLeft="100dp"
+            android:layout_marginRight="20dp"
             android:src="@drawable/ic_delete"
             android:padding="25dp"
             android:background="@drawable/swiper_btn_bg"
@@ -34,7 +35,6 @@
             android:gravity="center"
             android:padding="25dp"
             android:src="@drawable/ic_pencil"
-            android:layout_marginLeft="10dp"
             android:layout_marginRight="70dp"
             android:background="@drawable/swiper_btn_bg"
             android:textColor="@android:color/black"/>
@@ -83,11 +83,13 @@
 
             <ImageView
                 android:id="@+id/ic_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/ic_arrow"
+                android:rotationY="0"
+                android:src="@drawable/ic_arrow_open"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

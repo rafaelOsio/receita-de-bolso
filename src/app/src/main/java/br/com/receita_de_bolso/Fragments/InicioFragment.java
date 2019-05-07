@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import br.com.receita_de_bolso.Activities.MainActivity;
 import br.com.receita_de_bolso.R;
 
 public class InicioFragment extends Fragment {
@@ -20,7 +21,7 @@ public class InicioFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        ((MainActivity)getActivity()).updateStatusBarColor("#FF972F");
         return inflater.inflate(R.layout.fragment_inicio, container, false);
     }
 
