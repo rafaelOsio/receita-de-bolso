@@ -5,7 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import br.com.receita_de_bolso.Database.DBHelper;
 import br.com.receita_de_bolso.Domain.Receita;
@@ -21,8 +26,9 @@ public class ReceitaDAO {
     public static String NOME = "nome";
     public static String TEMPO_PREPARO= "tempo_preparo";
     public static String RENDIMENTO = "rendimento";
-    public static String INGRIDIENTES = "ingridientes";
+    public static String INGREDIENTES = "ingredientes";
     public static String MODO_PREPARO = "modo_preparo";
+    public static String ULTIMO_ACESSO = "ultimo_acesso";
 
     public ReceitaDAO(Context context){
         banco = new DBHelper(context);
@@ -37,17 +43,19 @@ public class ReceitaDAO {
         valores.put(NOME, receita.getNome());
         valores.put(TEMPO_PREPARO, receita.getTempoPreparo());
         valores.put(RENDIMENTO, receita.getRendimento());
-        valores.put(INGRIDIENTES, receita.getIngridientes());
+        valores.put(INGREDIENTES, receita.getIngridientes());
         valores.put(MODO_PREPARO, receita.getModoPreparo());
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String strDataUltimoAcesso = dateFormat.format(receita.getUltimoAcesso());
+
+        valores.put(ULTIMO_ACESSO, strDataUltimoAcesso);
 
         long resultado = db.insert(TABELA, null, valores);
 
         db.close();
 
-        if(resultado == -1)
-            return -1;
-        else
-            return resultado;
+        return resultado;
     }
 
     public int update(Receita receita){
@@ -61,10 +69,16 @@ public class ReceitaDAO {
         valores.put(NOME, receita.getNome());
         valores.put(TEMPO_PREPARO, receita.getTempoPreparo());
         valores.put(RENDIMENTO, receita.getRendimento());
-        valores.put(INGRIDIENTES, receita.getIngridientes());
+        valores.put(INGREDIENTES, receita.getIngridientes());
         valores.put(MODO_PREPARO, receita.getModoPreparo());
 
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String strDataUltimoAcesso = dateFormat.format(receita.getUltimoAcesso());
+
+        valores.put(ULTIMO_ACESSO, strDataUltimoAcesso);
+
         int response = db.update(TABELA, valores, where,null);
+
         db.close();
 
         return response;
@@ -84,7 +98,7 @@ public class ReceitaDAO {
     public ArrayList<Receita> getAll() {
         db = banco.getReadableDatabase();
 
-        Cursor cursor = db.query(TABELA, new String[] { ID, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGRIDIENTES, MODO_PREPARO}, null,null,null,null,null);
+        Cursor cursor = db.query(TABELA, new String[] { ID, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO}, null,null,null,null,null);
         ArrayList<Receita> result = new ArrayList<>();
 
         if (cursor.moveToFirst()){
@@ -95,8 +109,17 @@ public class ReceitaDAO {
                 receita.setCategoriaId(cursor.getLong(cursor.getColumnIndex(CATEGORIA_ID)));
                 receita.setTempoPreparo(cursor.getInt(cursor.getColumnIndex(TEMPO_PREPARO)));
                 receita.setRendimento(cursor.getInt(cursor.getColumnIndex(RENDIMENTO)));
-                receita.setIngridientes(cursor.getString(cursor.getColumnIndex(INGRIDIENTES)));
+                receita.setIngridientes(cursor.getString(cursor.getColumnIndex(INGREDIENTES)));
                 receita.setModoPreparo(cursor.getString(cursor.getColumnIndex(MODO_PREPARO)));
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+
+                try {
+                    Date date = new Date(formatter.parse(cursor.getString(cursor.getColumnIndex(ULTIMO_ACESSO))).getTime());
+                    receita.setUltimoAcesso(date);
+                } catch (ParseException e) {
+                    //hihi
+                }
 
                 result.add(receita);
             } while (cursor.moveToNext());
@@ -112,7 +135,7 @@ public class ReceitaDAO {
 
         String where = ID + "=" + id;
         db = banco.getReadableDatabase();
-        Cursor cursor = db.query(TABELA, new String[] { ID, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGRIDIENTES, MODO_PREPARO}, where, null,null,null,null,null);
+        Cursor cursor = db.query(TABELA, new String[] { ID, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO}, where, null,null,null,null,null);
 
         if(cursor.moveToFirst()){
 
@@ -122,8 +145,17 @@ public class ReceitaDAO {
             receita.setCategoriaId(cursor.getLong(cursor.getColumnIndex(CATEGORIA_ID)));
             receita.setTempoPreparo(cursor.getInt(cursor.getColumnIndex(TEMPO_PREPARO)));
             receita.setRendimento(cursor.getInt(cursor.getColumnIndex(RENDIMENTO)));
-            receita.setIngridientes(cursor.getString(cursor.getColumnIndex(INGRIDIENTES)));
+            receita.setIngridientes(cursor.getString(cursor.getColumnIndex(INGREDIENTES)));
             receita.setModoPreparo(cursor.getString(cursor.getColumnIndex(MODO_PREPARO)));
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+
+            try {
+                Date date = new Date(formatter.parse(cursor.getString(cursor.getColumnIndex(ULTIMO_ACESSO))).getTime());
+                receita.setUltimoAcesso(date);
+            } catch (ParseException e) {
+                //hihi
+            }
 
             db.close();
 

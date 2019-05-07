@@ -1,5 +1,7 @@
 package br.com.receita_de_bolso.Domain;
 
+import java.util.Date;
+
 public class Receita {
     private Long id;
     private Categoria categoria;
@@ -9,6 +11,15 @@ public class Receita {
     private int rendimento;
     private String ingridientes;
     private String modoPreparo;
+    private Date ultimoAcesso;
+
+    public Date getUltimoAcesso() {
+        return ultimoAcesso;
+    }
+
+    public void setUltimoAcesso(Date ultimoAcesso) {
+        this.ultimoAcesso = ultimoAcesso;
+    }
 
     public Long getId() {
         return id;
