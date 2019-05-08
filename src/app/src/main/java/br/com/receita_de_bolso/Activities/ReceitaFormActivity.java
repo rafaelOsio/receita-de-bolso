@@ -3,6 +3,7 @@ package br.com.receita_de_bolso.Activities;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -57,21 +58,13 @@ public class ReceitaFormActivity extends AppCompatActivity {
         this.categoriaDAO = new CategoriaDAO(this);
 
         if (getIntent().getExtras() != null) {
-            this.Id = getIntent().getExtras().getInt("id");
+            Log.e("teste", String.valueOf(getIntent().getExtras().getLong("id")));
+            this.Id = getIntent().getExtras().getLong("id");
         }
 
         categorias = categoriaDAO.getAll();
         if (categorias != null) {
             selectedCategory = categorias.get(0);
-        }
-
-        if (this.Id != -1) {
-            Receita receita = receitaDAO.getById(this.Id);
-            recipeName.setText(receita.getNome());
-            recipeIngredients.setText(receita.getIngredientes());
-            recipeMethodOfPreparation.setText(receita.getModoPreparo());
-            recipePortions.setText(receita.getRendimento());
-            recipePreparationTime.setText(receita.getTempoPreparo());
         }
 
         categorySpinner = findViewById(R.id.category_spinner);
@@ -90,6 +83,21 @@ public class ReceitaFormActivity extends AppCompatActivity {
 
             }
         });
+
+        if (this.Id != -1) {
+            Receita receita = receitaDAO.getById(this.Id);
+            Log.e("id", String.valueOf(this.Id));
+            if (receita == null)
+                 return;
+            Log.e("id", String.valueOf(this.Id));
+            this.recipeName.setText(receita.getNome());
+            this.recipeIngredients.setText(receita.getIngredientes());
+            this.recipeMethodOfPreparation.setText(receita.getModoPreparo());
+            this.recipePortions.setText(String.valueOf(receita.getRendimento()));
+            this.recipePreparationTime.setText(String.valueOf(receita.getTempoPreparo()));
+            Categoria categoria = categoriaDAO.getById(receita.getCategoriaId());
+            this.categorySpinner.setSelection(categoryAdapter.getPosition(categoria));
+        }
     }
 
     @OnClick(R.id.back_button)
@@ -127,13 +135,14 @@ public class ReceitaFormActivity extends AppCompatActivity {
         receita.setUltimoAcesso(new Date());
 
         if (this.Id == -1) {
+            Toast.makeText(this, "Receita adicionada com sucesso! :)", Toast.LENGTH_SHORT).show();
             receitaDAO.insert(receita);
         } else {
+            Toast.makeText(this, "Receita editada com sucesso! :)", Toast.LENGTH_SHORT).show();
             receita.setId(this.Id);
             receitaDAO.update(receita);
         }
 
-        Toast.makeText(this, "Receita adicionada com sucesso! :)", Toast.LENGTH_SHORT).show();
         super.onBackPressed();
     }
 }

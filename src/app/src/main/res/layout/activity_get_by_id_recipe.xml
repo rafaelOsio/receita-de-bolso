@@ -12,6 +12,8 @@
 
         <ImageView
             android:id="@+id/recipe_photo"
+            android:src="@drawable/img_categories_bg"
+            android:scaleType="centerCrop"
             android:layout_width="0dp"
             android:layout_height="285dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,33 +30,21 @@
             android:padding="30dp"
             app:layout_constraintBottom_toBottomOf="@+id/recipe_photo"
             app:layout_constraintEnd_toEndOf="@+id/recipe_photo"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/recipe_photo"
-            app:layout_constraintTop_toBottomOf="@+id/recipe_photo">
-
-            <View
-                android:id="@+id/view3"
-                android:layout_width="2dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="-10dp"
-                android:layout_marginBottom="-10dp"
-                android:background="#D8D4D4"
-                app:layout_constraintBottom_toBottomOf="@+id/textView5"
-                app:layout_constraintEnd_toStartOf="@+id/textView5"
-                app:layout_constraintStart_toEndOf="@+id/textView4"
-                app:layout_constraintTop_toTopOf="@+id/imageView5" />
+            app:layout_constraintTop_toBottomOf="@+id/recipe_photo"
+            app:layout_constraintVertical_bias="0.55">
 
             <View
                 android:id="@+id/view2"
                 android:layout_width="2dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="-10dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="-10dp"
                 android:background="#D8D4D4"
-                app:layout_constraintBottom_toBottomOf="@+id/textView5"
-                app:layout_constraintEnd_toStartOf="@+id/textView6"
-                app:layout_constraintStart_toEndOf="@+id/textView5"
+                app:layout_constraintBottom_toBottomOf="@+id/recipe_preparation_time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
             <TextView
@@ -74,62 +64,42 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:background="@drawable/ic_timer"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipe_name" />
-
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:background="@drawable/ic_format_list_bulleted"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-                app:layout_constraintEnd_toStartOf="@+id/imageView5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/ic_portions"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView5"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView5"
+                app:layout_constraintStart_toEndOf="@+id/view2"
                 app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
             <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10 ing."
-                app:layout_constraintBottom_toBottomOf="@+id/textView5"
-                app:layout_constraintEnd_toEndOf="@+id/imageView4"
-                app:layout_constraintStart_toStartOf="@+id/imageView4"
-                app:layout_constraintTop_toBottomOf="@+id/imageView4"
-                app:layout_constraintTop_toTopOf="@+id/textView5" />
-
-            <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/recipe_preparation_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="140 min"
+                android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="@+id/imageView5"
                 app:layout_constraintStart_toStartOf="@+id/imageView5"
                 app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/recipe_portions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="15 por."
-                app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/recipe_preparation_time"
                 app:layout_constraintEnd_toEndOf="@+id/imageView3"
                 app:layout_constraintStart_toStartOf="@+id/imageView3"
-                app:layout_constraintTop_toTopOf="@+id/textView5" />
+                app:layout_constraintTop_toTopOf="@+id/recipe_preparation_time" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.tabs.TabLayout
@@ -150,5 +120,45 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             />
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/ic_rounded_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/remove_button"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/ic_rounded_delete"
+            app:layout_constraintEnd_toStartOf="@+id/edit_button"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/edit_button"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/ic_rounded_edit"
+            app:layout_constraintEnd_toStartOf="@+id/favorite_button"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/favorite_button"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/ic_rounded_favorite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

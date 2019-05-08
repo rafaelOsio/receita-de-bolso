@@ -43,7 +43,7 @@ public class ReceitaMainAdapter extends RecyclerView.Adapter<ReceitaMainViewHold
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDataUltimoAcesso = dateFormat.format(this.receitas.get(i).getUltimoAcesso());
 
-        receitaMainViewHolder.nome.setText(this.receitas.get(i).getNome() + " - " + strDataUltimoAcesso);
+        receitaMainViewHolder.nome.setText(this.receitas.get(i).getNome());
 
     }
 

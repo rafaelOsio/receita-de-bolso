@@ -2,6 +2,7 @@ package br.com.receita_de_bolso.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,12 @@ public class ReceitaAdapterAdapter extends RecyclerView.Adapter<ReceitaViewHolde
     public void onBindViewHolder(@NonNull ReceitaViewHolder receitaViewHolder, int i) {
         receitaViewHolder.nome.setText(this.receitas.get(i).getNome());
         receitaViewHolder.container.setOnClickListener(v -> {
+            Intent intent = new Intent(context, RecipeGetByIdActivity.class);
+            intent.putExtra("id", this.receitas.get(i).getId());
+            Log.e("idAntes", String.valueOf(intent.getExtras().getLong("id")));
+            context.startActivity(intent);
+        });
+        receitaViewHolder.image.setOnClickListener(v -> {
             Intent intent = new Intent(context, RecipeGetByIdActivity.class);
             intent.putExtra("id", this.receitas.get(i).getId());
             context.startActivity(intent);

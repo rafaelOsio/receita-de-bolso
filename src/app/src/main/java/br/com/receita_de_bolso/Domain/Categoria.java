@@ -1,5 +1,7 @@
 package br.com.receita_de_bolso.Domain;
 
+import java.util.Objects;
+
 public class Categoria {
 
     private Long id;
@@ -28,5 +30,18 @@ public class Categoria {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Categoria categoria = (Categoria) o;
+        return Objects.equals(id, categoria.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
