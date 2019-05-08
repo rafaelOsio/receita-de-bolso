@@ -20,11 +20,23 @@ public class TabFragment extends Fragment {
     @BindView(R.id.text)
     TextView text;
 
+    private String texto;
+
+    public TabFragment(String texto) {
+        this.texto = texto;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        text.setText(texto);
     }
 }

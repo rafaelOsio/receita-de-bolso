@@ -41,13 +41,17 @@ public class RecipeGetByIdActivity extends FragmentActivity {
 
         Resources resources = getResources();
         TabsAdapter adapter = new TabsAdapter(getSupportFragmentManager());
-        adapter.add(new TabFragment(), "Ingredientes");
-        adapter.add(new TabFragment(), "Modo de preparo");
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        TabFragment fragmentIngredientes = new TabFragment(this.receita.getIngredientes());
+        TabFragment fragmentModoPreparo = new TabFragment(this.receita.getModoPreparo());
+
+        adapter.add(fragmentIngredientes, "Ingredientes");
+        adapter.add(fragmentModoPreparo, "Modo de preparo");
+
+        ViewPager viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
 
