@@ -1,15 +1,23 @@
 package br.com.receita_de_bolso.Fragments;
 
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +26,9 @@ import java.util.ArrayList;
 import br.com.receita_de_bolso.Activities.MainActivity;
 import br.com.receita_de_bolso.Activities.ReceitaFormActivity;
 import br.com.receita_de_bolso.Adapters.ReceitaAdapterAdapter;
+import br.com.receita_de_bolso.DAO.CategoriaDAO;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
+import br.com.receita_de_bolso.Domain.Categoria;
 import br.com.receita_de_bolso.R;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,6 +38,8 @@ public class ReceitasFragment extends Fragment {
 
     private Unbinder unbinder;
     private ReceitaAdapterAdapter receitasAdapter;
+    private CategoriaDAO categoriaDAO;
+    private ArrayList<Categoria> categorias;
 
     public ReceitasFragment() {
 
@@ -48,7 +60,32 @@ public class ReceitasFragment extends Fragment {
 
     @OnClick(R.id.btn_add_recipe)
     public void onViewClicked() {
-        startActivity(new Intent(getActivity(), ReceitaFormActivity.class));
+        categoriaDAO = new CategoriaDAO(getContext());
+        categorias = categoriaDAO.getAll();
+
+        if (categorias.isEmpty()) {
+            AlertDialog.Builder simpleMessageDialog = new AlertDialog.Builder(getActivity());
+            View simpleMessageView = LayoutInflater.from(getActivity()).inflate(R.layout.simple_message_dialog, null);
+
+            TextView title = simpleMessageView.findViewById(R.id.txt_message);
+            Button btnCancel = simpleMessageView.findViewById(R.id.btn_close);
+
+            title.setText("Adicione uma categoria antes de adicionar uma receita!");
+
+            simpleMessageDialog.setView(simpleMessageView);
+            AlertDialog dialog = simpleMessageDialog.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            btnCancel.setOnClickListener(v1 -> {
+                dialog.hide();
+            });
+
+            dialog.show();
+
+            return;
+        } else {
+            startActivity(new Intent(getActivity(), ReceitaFormActivity.class));
+        }
     }
 
     @Override
@@ -64,6 +101,8 @@ public class ReceitasFragment extends Fragment {
         LinearLayoutManager linearLayoutManagerCategorias = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         recyclerViewReceitas.setLayoutManager(linearLayoutManagerCategorias);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
+        recyclerViewReceitas.setLayoutManager(mLayoutManager);
         recyclerViewReceitas.setAdapter(receitasAdapter);
     }
 

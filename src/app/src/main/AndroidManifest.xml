@@ -24,6 +24,8 @@
         <activity android:name=".Activities.ReceitaFormActivity"
             android:theme="@style/AppTheme.NoActionBar">
             </activity>
+        <activity android:name=".Activities.RecipeGetByIdActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -61,8 +61,9 @@ public class ReceitaFormActivity extends AppCompatActivity {
         }
 
         categorias = categoriaDAO.getAll();
-
-        selectedCategory = categorias.get(0);
+        if (categorias != null) {
+            selectedCategory = categorias.get(0);
+        }
 
         if (this.Id != -1) {
             Receita receita = receitaDAO.getById(this.Id);

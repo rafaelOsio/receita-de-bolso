@@ -1,6 +1,7 @@
 package br.com.receita_de_bolso.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 
 import java.util.ArrayList;
 
+import br.com.receita_de_bolso.Activities.ReceitaFormActivity;
+import br.com.receita_de_bolso.Activities.RecipeGetByIdActivity;
 import br.com.receita_de_bolso.Domain.Receita;
 import br.com.receita_de_bolso.R;
 import br.com.receita_de_bolso.ViewHolders.ReceitaViewHolder;
@@ -43,6 +46,11 @@ public class ReceitaAdapterAdapter extends RecyclerView.Adapter<ReceitaViewHolde
     @Override
     public void onBindViewHolder(@NonNull ReceitaViewHolder receitaViewHolder, int i) {
         receitaViewHolder.nome.setText(this.receitas.get(i).getNome());
+        receitaViewHolder.container.setOnClickListener(v -> {
+            Intent intent = new Intent(context, RecipeGetByIdActivity.class);
+            intent.putExtra("id", this.receitas.get(i).getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override
