@@ -203,4 +203,41 @@ public class ReceitaDAO {
         db.close();
         return null;
     }
+
+    public ArrayList<Receita> getByCategoryId(Long id) {
+        db = banco.getReadableDatabase();
+
+        String where = CATEGORIA_ID + "=" + id;
+        Cursor cursor = db.query(TABELA, new String[] { ID, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO}, where, null,null,null,null,null);
+        ArrayList<Receita> result = new ArrayList<>();
+
+        if (cursor.moveToFirst()){
+            do{
+                Receita receita = new Receita();
+                receita.setId(cursor.getLong(cursor.getColumnIndex(ID)));
+                receita.setNome(cursor.getString(cursor.getColumnIndex(NOME)));
+                receita.setCategoriaId(cursor.getLong(cursor.getColumnIndex(CATEGORIA_ID)));
+                receita.setTempoPreparo(cursor.getInt(cursor.getColumnIndex(TEMPO_PREPARO)));
+                receita.setRendimento(cursor.getInt(cursor.getColumnIndex(RENDIMENTO)));
+                receita.setIngredientes(cursor.getString(cursor.getColumnIndex(INGREDIENTES)));
+                receita.setModoPreparo(cursor.getString(cursor.getColumnIndex(MODO_PREPARO)));
+
+                SimpleDateFormat formatter = new SimpleDateFormat(PADRAO_DATA);
+
+                try {
+                    Date date = new Date(formatter.parse(cursor.getString(cursor.getColumnIndex(ULTIMO_ACESSO))).getTime());
+                    receita.setUltimoAcesso(date);
+                } catch (ParseException e) {
+                    //hihi
+                }
+
+                result.add(receita);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+        cursor.close();
+
+        return result;
+    }
 }

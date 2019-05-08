@@ -18,10 +18,12 @@ public class CategoriaViewHolder extends RecyclerView.ViewHolder {
     public ImageView arrow;
     public ImageView btnDelete;
     public ImageView btnEdit;
+    public View card;
 
     public CategoriaViewHolder(@NonNull View itemView) {
         super(itemView);
 
+        card = itemView.findViewById(R.id.category_card);
         nome = itemView.findViewById(R.id.category_name);
         descricao = itemView.findViewById(R.id.category_description);
         swipeRevealLayout = itemView.findViewById(R.id.swipe_layout);

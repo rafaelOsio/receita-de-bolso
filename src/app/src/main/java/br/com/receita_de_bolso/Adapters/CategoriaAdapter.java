@@ -2,6 +2,7 @@ package br.com.receita_de_bolso.Adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 
 import java.util.ArrayList;
 
+import br.com.receita_de_bolso.Activities.GetRecipeByCategory;
 import br.com.receita_de_bolso.DAO.CategoriaDAO;
 import br.com.receita_de_bolso.Domain.Categoria;
 import br.com.receita_de_bolso.R;
@@ -55,6 +57,12 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaViewHolder> 
         categoriaViewHolder.nome.setText(this.categorias.get(i).getNome());
         categoriaViewHolder.descricao.setText(this.categorias.get(i).getDescricao());
         viewBinderHelper.bind(categoriaViewHolder.swipeRevealLayout, this.categorias.get(i).getNome());
+
+        categoriaViewHolder.card.setOnClickListener(v -> {
+            Intent intent = new Intent(context, GetRecipeByCategory.class);
+            intent.putExtra("id", this.categorias.get(i).getId());
+            context.startActivity(intent);
+        });
 
         categoriaViewHolder.swipeRevealLayout.setSwipeListener( new SwipeRevealLayout.SwipeListener() {
             @Override
