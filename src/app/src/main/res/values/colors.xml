@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#FAFAFA</color>
     <color name="colorSecundary">#FF972F</color>
     <color name="colorSecundaryLight">#FFC891</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#FF972F</color>
 </resources>
