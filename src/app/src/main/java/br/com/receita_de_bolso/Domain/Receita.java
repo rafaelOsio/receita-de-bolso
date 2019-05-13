@@ -1,5 +1,7 @@
 package br.com.receita_de_bolso.Domain;
 
+import android.graphics.Bitmap;
+
 import java.util.Date;
 
 public class Receita {
@@ -12,6 +14,42 @@ public class Receita {
     private String ingredientes;
     private String modoPreparo;
     private Date ultimoAcesso;
+    private Boolean isFav;
+    private Bitmap imageBitmap;
+    private String imageName;
+    private String imageExtension;
+
+    public String getImageExtension() {
+        return imageExtension;
+    }
+
+    public void setImageExtension(String imageExtension) {
+        this.imageExtension = imageExtension;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public Bitmap getImageBitmap() {
+        return imageBitmap;
+    }
+
+    public void setImageBitmap(Bitmap imageBitmap) {
+        this.imageBitmap = imageBitmap;
+    }
+
+    public Boolean getFav() {
+        return isFav;
+    }
+
+    public void setFav(Boolean fav) {
+        isFav = fav;
+    }
 
     public Date getUltimoAcesso() {
         return ultimoAcesso;
