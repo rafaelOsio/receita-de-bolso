@@ -23,6 +23,8 @@ import butterknife.OnClick;
 public class GetRecipeByCategory extends AppCompatActivity {
     @BindView(R.id.activity_title)
     TextView activityTitle;
+    @BindView(R.id.activity_subtitle)
+    TextView activitySubtitle;
     private ReceitaAdapterAdapter receitasAdapter;
     private ReceitaDAO receitaDAO;
     private CategoriaDAO categoryDAO;
@@ -43,6 +45,7 @@ public class GetRecipeByCategory extends AppCompatActivity {
         }
 
         this.activityTitle.setText(this.category.getNome());
+        this.activitySubtitle.setText(this.category.getDescricao());
 
         this.receitasAdapter = new ReceitaAdapterAdapter(this, new ArrayList<>());
         setupRecyclerViewReceitas();

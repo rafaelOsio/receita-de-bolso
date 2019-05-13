@@ -9,11 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.receita_de_bolso.R;
 
 public class CategoriaMainViewHolder extends RecyclerView.ViewHolder {
+
     public TextView nome;
+    public View categoryCard;
 
     public CategoriaMainViewHolder (@NonNull View itemView) {
         super(itemView);
 
         nome = itemView.findViewById(R.id.categoria_nome);
+        categoryCard = itemView.findViewById(R.id.category_card);
     }
 }

@@ -1,6 +1,8 @@
 package br.com.receita_de_bolso.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import br.com.receita_de_bolso.Activities.RecipeGetByIdActivity;
 import br.com.receita_de_bolso.Domain.Receita;
 import br.com.receita_de_bolso.R;
 import br.com.receita_de_bolso.ViewHolders.ReceitaMainViewHolder;
@@ -42,6 +45,12 @@ public class ReceitaMainAdapter extends RecyclerView.Adapter<ReceitaMainViewHold
     public void onBindViewHolder(@NonNull ReceitaMainViewHolder receitaMainViewHolder, int i) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDataUltimoAcesso = dateFormat.format(this.receitas.get(i).getUltimoAcesso());
+
+        receitaMainViewHolder.recipeCard.setOnClickListener(v -> {
+            Intent intent = new Intent(context, RecipeGetByIdActivity.class);
+            intent.putExtra("id", this.receitas.get(i).getId());
+            context.startActivity(intent);
+        });
 
         receitaMainViewHolder.nome.setText(this.receitas.get(i).getNome());
 

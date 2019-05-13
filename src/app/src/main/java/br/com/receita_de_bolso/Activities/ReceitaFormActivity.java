@@ -161,6 +161,7 @@ public class ReceitaFormActivity extends AppCompatActivity {
         receita.setTempoPreparo(Integer.parseInt(preparationTime));
         receita.setCategoria(categoria);
         receita.setCategoriaId(categoria.getId());
+        receita.setFav(false);
         receita.setUltimoAcesso(new Date());
 
         if(receita.getImageBitmap() != null) {

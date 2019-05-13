@@ -1,6 +1,7 @@
 package br.com.receita_de_bolso.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import br.com.receita_de_bolso.Activities.GetRecipeByCategory;
 import br.com.receita_de_bolso.Domain.Categoria;
 import br.com.receita_de_bolso.R;
 import br.com.receita_de_bolso.ViewHolders.CategoriaMainViewHolder;
@@ -40,6 +42,12 @@ public class CategoriaMainAdapter extends RecyclerView.Adapter<CategoriaMainView
     @Override
     public void onBindViewHolder(@NonNull CategoriaMainViewHolder holder, int position) {
         holder.nome.setText(this.categorias.get(position).getNome());
+
+        holder.categoryCard.setOnClickListener(v -> {
+            Intent intent = new Intent(context, GetRecipeByCategory.class);
+            intent.putExtra("id", this.categorias.get(position).getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override

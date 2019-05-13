@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import br.com.receita_de_bolso.Activities.ReceitaFormActivity;
 import br.com.receita_de_bolso.Activities.RecipeGetByIdActivity;
+import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Receita;
 import br.com.receita_de_bolso.R;
 import br.com.receita_de_bolso.ViewHolders.ReceitaViewHolder;
@@ -25,10 +26,12 @@ public class ReceitaAdapterAdapter extends RecyclerView.Adapter<ReceitaViewHolde
     private Context context;
     private ArrayList<Receita> receitas;
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+    private ReceitaDAO receitaDAO;
 
     public ReceitaAdapterAdapter(Context context, ArrayList<Receita> receitas) {
         this.context = context;
         this.receitas = receitas;
+        this.receitaDAO = new ReceitaDAO(context);
         viewBinderHelper.setOpenOnlyOne(true);
     }
 
@@ -47,16 +50,31 @@ public class ReceitaAdapterAdapter extends RecyclerView.Adapter<ReceitaViewHolde
     @Override
     public void onBindViewHolder(@NonNull ReceitaViewHolder receitaViewHolder, int i) {
         receitaViewHolder.nome.setText(this.receitas.get(i).getNome());
+
+        Boolean isFav = this.receitas.get(i).getFav();
+
+        if (isFav)
+            receitaViewHolder.favButton.setBackgroundResource(R.drawable.ic_heart);
+        else
+            receitaViewHolder.favButton.setBackgroundResource(R.drawable.ic_heart_outline);
+
         receitaViewHolder.container.setOnClickListener(v -> {
             Intent intent = new Intent(context, RecipeGetByIdActivity.class);
             intent.putExtra("id", this.receitas.get(i).getId());
             Log.e("idAntes", String.valueOf(intent.getExtras().getLong("id")));
             context.startActivity(intent);
         });
-        receitaViewHolder.image.setOnClickListener(v -> {
+
+        receitaViewHolder.image.setOnClickListener(v1 -> {
             Intent intent = new Intent(context, RecipeGetByIdActivity.class);
             intent.putExtra("id", this.receitas.get(i).getId());
             context.startActivity(intent);
+        });
+
+        receitaViewHolder.favButton.setOnClickListener(v2 -> {
+            this.receitas.get(i).setFav(!isFav);
+            receitaDAO.update(this.receitas.get(i));
+            notifyDataSetChanged();
         });
     }
 

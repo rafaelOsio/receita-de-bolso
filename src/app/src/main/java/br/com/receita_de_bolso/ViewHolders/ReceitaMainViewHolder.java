@@ -11,10 +11,12 @@ import br.com.receita_de_bolso.R;
 public class ReceitaMainViewHolder extends RecyclerView.ViewHolder {
 
     public TextView nome;
+    public View recipeCard;
 
     public ReceitaMainViewHolder(@NonNull View itemView) {
         super(itemView);
 
         nome = itemView.findViewById(R.id.receita_nome);
+        recipeCard = itemView.findViewById(R.id.recipe_card);
     }
 }

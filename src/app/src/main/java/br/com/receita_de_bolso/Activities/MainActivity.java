@@ -3,6 +3,7 @@ package br.com.receita_de_bolso.Activities;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import br.com.receita_de_bolso.Fragments.CategoriasFragment;
+import br.com.receita_de_bolso.Fragments.FavoritesFragment;
 import br.com.receita_de_bolso.Fragments.InicioFragment;
 import br.com.receita_de_bolso.Fragments.ReceitasFragment;
 import br.com.receita_de_bolso.R;
@@ -42,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 //getSupportActionBar().setTitle("Início");
                 Fragment inicioFragment = InicioFragment.newInstance();
                 openFragment(inicioFragment);
+                break;
+            }
+            case R.id.navigation_favorite: {
+                Fragment favoriteFragment = FavoritesFragment.newInstance();
+                openFragment(favoriteFragment);
                 break;
             }
             case R.id.navigation_recipes: {

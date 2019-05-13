@@ -3,6 +3,7 @@ package br.com.receita_de_bolso.Activities;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
@@ -26,6 +27,8 @@ public class RecipeGetByIdActivity extends FragmentActivity {
     TextView recipePreparationTime;
     @BindView(R.id.recipe_portions)
     TextView recipePortions;
+    @BindView(R.id.favorite_button)
+    Button favoriteButton;
     private Long Id;
     private ReceitaDAO receitaDAO;
     private Receita receita;
@@ -69,6 +72,8 @@ public class RecipeGetByIdActivity extends FragmentActivity {
         recipeName.setText(this.receita.getNome());
         recipePortions.setText(this.receita.getRendimento() + " por.");
         recipePreparationTime.setText(this.receita.getTempoPreparo() + " min.");
+
+        setFavButtonImage();
     }
 
     @OnClick(R.id.remove_button)
@@ -81,6 +86,13 @@ public class RecipeGetByIdActivity extends FragmentActivity {
         getData();
     }
 
+    public void setFavButtonImage() {
+        if (this.receita.getFav())
+            this.favoriteButton.setBackgroundResource(R.drawable.ic_rounded_heart);
+        else
+            this.favoriteButton.setBackgroundResource(R.drawable.ic_rounded_heart_outline);
+    }
+
     @OnClick(R.id.edit_button)
     public void onEditButtonClicked() {
         Intent intent = new Intent(getBaseContext(), ReceitaFormActivity.class);
@@ -90,5 +102,13 @@ public class RecipeGetByIdActivity extends FragmentActivity {
 
     @OnClick(R.id.favorite_button)
     public void onFavoriteButtonClicked() {
+        if (this.receita.getFav())
+            this.receita.setFav(false);
+        else
+            this.receita.setFav(true);
+
+        receitaDAO.update(this.receita);
+
+        setFavButtonImage();
     }
 }
