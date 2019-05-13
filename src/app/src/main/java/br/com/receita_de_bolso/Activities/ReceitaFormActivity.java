@@ -1,6 +1,8 @@
 package br.com.receita_de_bolso.Activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -76,6 +79,8 @@ public class ReceitaFormActivity extends AppCompatActivity {
         this.receitaDAO = new ReceitaDAO(this);
         this.categoriaDAO = new CategoriaDAO(this);
 
+        this.getPermissions();
+
         if (getIntent().getExtras() != null) {
             Log.e("teste", String.valueOf(getIntent().getExtras().getLong("id")));
             this.Id = getIntent().getExtras().getLong("id");
@@ -121,7 +126,7 @@ public class ReceitaFormActivity extends AppCompatActivity {
 //            String d = Environment.getExternalStorageDirectory() + File.separator + "images" + File.separator + receita.getImageName();
 //            System.out.println(d);
 
-            File imgFile = new  File(Environment.getExternalStorageDirectory() + File.separator + "images" + File.separator + receita.getImageName());
+            File imgFile = new  File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator + receita.getImageName());
             if(imgFile.exists())
             {
                 imageRecipe.setImageURI(Uri.fromFile(imgFile));
@@ -166,20 +171,25 @@ public class ReceitaFormActivity extends AppCompatActivity {
 
         if(receita.getImageBitmap() != null) {
             receita.setImageName(UUID.randomUUID().toString() + "." + receita.getImageExtension());
+            System.out.println("oi: " + receita.getImageName());
 
             OutputStream fOut = null;
             Uri outputFileUri;
             try {
-                File root = new File(Environment.getExternalStorageDirectory() + File.separator + "images" + File.separator);
+                File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator);
                 root.mkdirs();
 
                 File sdImageMainDirectory = new File(root, receita.getImageName());
 
-                String t = Environment.getExternalStorageDirectory() + File.separator + "images" + File.separator + receita.getImageName();
-                System.out.println(t);
-
                 outputFileUri = Uri.fromFile(sdImageMainDirectory);
                 fOut = new FileOutputStream(sdImageMainDirectory);
+
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                File f = new File(outputFileUri.toString());
+                Uri contentUri = Uri.fromFile(f);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+
             } catch (Exception e) {
                 Toast.makeText(this, "Não foi possível salvar a imagem da sua receita.", Toast.LENGTH_LONG).show();
             }
@@ -232,4 +242,28 @@ public class ReceitaFormActivity extends AppCompatActivity {
         }
 
     }
+
+    private void getPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Você precisa fornecer as permissões para cadastrar uma nova receita.", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+
+                break;
+            }
+        }
+    }
+
+
 }
