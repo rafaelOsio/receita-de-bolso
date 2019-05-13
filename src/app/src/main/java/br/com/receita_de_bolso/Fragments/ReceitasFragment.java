@@ -29,12 +29,14 @@ import br.com.receita_de_bolso.Adapters.ReceitaAdapterAdapter;
 import br.com.receita_de_bolso.DAO.CategoriaDAO;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Categoria;
+import br.com.receita_de_bolso.Domain.Receita;
+import br.com.receita_de_bolso.Interfaces.IReceitaOnClickListener;
 import br.com.receita_de_bolso.R;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class ReceitasFragment extends Fragment {
+public class ReceitasFragment extends Fragment implements IReceitaOnClickListener {
 
     private Unbinder unbinder;
     private ReceitaAdapterAdapter receitasAdapter;
@@ -91,7 +93,7 @@ public class ReceitasFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.receitasAdapter = new ReceitaAdapterAdapter(getContext(), new ArrayList<>());
+        this.receitasAdapter = new ReceitaAdapterAdapter(getContext(), new ArrayList<>(), this);
         setupRecyclerViewReceitas();
     }
 
@@ -110,12 +112,17 @@ public class ReceitasFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        getAllReceitas(receitasAdapter);
+        getAllReceitas();
     }
 
-    private void getAllReceitas(ReceitaAdapterAdapter receitaAdapter) {
+    private void getAllReceitas() {
         ReceitaDAO receitaDAO = new ReceitaDAO(getContext());
-        receitaAdapter.setItems(receitaDAO.getAll());
+        receitasAdapter.setItems(receitaDAO.getAll());
     }
 
+    public void favoritoOnClick(Receita receita) {
+        ReceitaDAO receitaDAO = new ReceitaDAO(getContext());
+        receitaDAO.update(receita);
+        this.getAllReceitas();
+    }
 }

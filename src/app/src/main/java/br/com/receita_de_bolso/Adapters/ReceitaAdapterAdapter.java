@@ -18,6 +18,7 @@ import br.com.receita_de_bolso.Activities.ReceitaFormActivity;
 import br.com.receita_de_bolso.Activities.RecipeGetByIdActivity;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Receita;
+import br.com.receita_de_bolso.Interfaces.IReceitaOnClickListener;
 import br.com.receita_de_bolso.R;
 import br.com.receita_de_bolso.ViewHolders.ReceitaViewHolder;
 
@@ -27,12 +28,14 @@ public class ReceitaAdapterAdapter extends RecyclerView.Adapter<ReceitaViewHolde
     private ArrayList<Receita> receitas;
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
     private ReceitaDAO receitaDAO;
+    private IReceitaOnClickListener receitaOnClickListener;
 
-    public ReceitaAdapterAdapter(Context context, ArrayList<Receita> receitas) {
+    public ReceitaAdapterAdapter(Context context, ArrayList<Receita> receitas, IReceitaOnClickListener receitaOnClickListener) {
         this.context = context;
         this.receitas = receitas;
         this.receitaDAO = new ReceitaDAO(context);
-        viewBinderHelper.setOpenOnlyOne(true);
+        this.viewBinderHelper.setOpenOnlyOne(true);
+        this.receitaOnClickListener = receitaOnClickListener;
     }
 
     public void setItems(ArrayList<Receita> receitas) {
@@ -73,8 +76,7 @@ public class ReceitaAdapterAdapter extends RecyclerView.Adapter<ReceitaViewHolde
 
         receitaViewHolder.favButton.setOnClickListener(v2 -> {
             this.receitas.get(i).setFav(!isFav);
-            receitaDAO.update(this.receitas.get(i));
-            notifyDataSetChanged();
+            this.receitaOnClickListener.favoritoOnClick(this.receitas.get(i));
         });
     }
 

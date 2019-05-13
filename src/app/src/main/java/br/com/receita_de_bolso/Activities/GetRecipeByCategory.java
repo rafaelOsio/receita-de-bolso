@@ -15,12 +15,14 @@ import br.com.receita_de_bolso.DAO.CategoriaDAO;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Categoria;
 import br.com.receita_de_bolso.Domain.Receita;
+import br.com.receita_de_bolso.Interfaces.IReceitaOnClickListener;
 import br.com.receita_de_bolso.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class GetRecipeByCategory extends AppCompatActivity {
+public class GetRecipeByCategory extends AppCompatActivity implements IReceitaOnClickListener {
+
     @BindView(R.id.activity_title)
     TextView activityTitle;
     @BindView(R.id.activity_subtitle)
@@ -47,7 +49,7 @@ public class GetRecipeByCategory extends AppCompatActivity {
         this.activityTitle.setText(this.category.getNome());
         this.activitySubtitle.setText(this.category.getDescricao());
 
-        this.receitasAdapter = new ReceitaAdapterAdapter(this, new ArrayList<>());
+        this.receitasAdapter = new ReceitaAdapterAdapter(this, new ArrayList<>(), this);
         setupRecyclerViewReceitas();
     }
 
@@ -71,11 +73,17 @@ public class GetRecipeByCategory extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        getAllReceitas(receitasAdapter);
+        getAllReceitas();
     }
 
-    private void getAllReceitas(ReceitaAdapterAdapter receitaAdapter) {
+    private void getAllReceitas() {
         ReceitaDAO receitaDAO = new ReceitaDAO(this);
-        receitaAdapter.setItems(receitaDAO.getByCategoryId(this.Id));
+        receitasAdapter.setItems(receitaDAO.getByCategoryId(this.Id));
+    }
+
+    public void favoritoOnClick(Receita receita) {
+        ReceitaDAO receitaDAO = new ReceitaDAO(getBaseContext());
+        receitaDAO.update(receita);
+        getAllReceitas();
     }
 }

@@ -16,9 +16,11 @@ import java.util.ArrayList;
 
 import br.com.receita_de_bolso.Adapters.ReceitaAdapterAdapter;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
+import br.com.receita_de_bolso.Domain.Receita;
+import br.com.receita_de_bolso.Interfaces.IReceitaOnClickListener;
 import br.com.receita_de_bolso.R;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements IReceitaOnClickListener {
 
     private ReceitaAdapterAdapter receitasAdapter;
 
@@ -32,7 +34,7 @@ public class FavoritesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.receitasAdapter = new ReceitaAdapterAdapter(getContext(), new ArrayList<>());
+        this.receitasAdapter = new ReceitaAdapterAdapter(getContext(), new ArrayList<>(), this);
         setupRecyclerViewReceitas();
     }
 
@@ -51,15 +53,22 @@ public class FavoritesFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        getAllFavorites(receitasAdapter);
+        getAllFavorites();
     }
 
-    private void getAllFavorites(ReceitaAdapterAdapter receitaAdapter) {
+    private void getAllFavorites() {
         ReceitaDAO receitaDAO = new ReceitaDAO(getContext());
-        receitaAdapter.setItems(receitaDAO.getAllFav());
+        receitasAdapter.setItems(receitaDAO.getAllFav());
     }
 
     public static FavoritesFragment newInstance() {
         return new FavoritesFragment();
+    }
+
+    @Override
+    public void favoritoOnClick(Receita receita) {
+        ReceitaDAO receitaDAO = new ReceitaDAO(getContext());
+        receitaDAO.update(receita);
+        receitasAdapter.setItems(receitaDAO.getAllFav());
     }
 }
