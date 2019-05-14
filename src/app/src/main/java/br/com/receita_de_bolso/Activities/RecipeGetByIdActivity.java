@@ -1,9 +1,14 @@
 package br.com.receita_de_bolso.Activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
@@ -78,6 +83,29 @@ public class RecipeGetByIdActivity extends FragmentActivity {
 
     @OnClick(R.id.remove_button)
     public void onRemoveButtonClicked() {
+        AlertDialog.Builder removeRecipeDialog = new AlertDialog.Builder(this);
+        View removeRecipeView = getLayoutInflater().inflate(R.layout.remove_dialog, null);
+
+        Button btnConfirm = removeRecipeView.findViewById(R.id.btn_confirm);
+        Button btnCancel = removeRecipeView.findViewById(R.id.btn_cancel);
+
+        removeRecipeDialog.setView(removeRecipeView);
+        AlertDialog dialog = removeRecipeDialog.create();
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        btnCancel.setOnClickListener(v -> {
+            dialog.hide();
+        });
+
+        btnConfirm.setOnClickListener(v1 -> {
+            receitaDAO.delete(this.Id);
+            dialog.hide();
+            onBackButtonClicked();
+            return;
+        });
+
+        dialog.show();
     }
 
     @Override

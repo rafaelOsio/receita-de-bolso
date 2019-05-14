@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,10 +16,12 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.palette.graphics.Palette;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,6 +61,8 @@ public class ReceitaFormActivity extends AppCompatActivity {
     Spinner categorySpinner;
     @BindView(R.id.image_recipe)
     ImageView imageRecipe;
+    @BindView(R.id.activity_title)
+    TextView activityTitle;
     private Categoria selectedCategory;
     private long Id = -1;
     private ReceitaDAO receitaDAO;
@@ -126,9 +129,8 @@ public class ReceitaFormActivity extends AppCompatActivity {
 //            String d = Environment.getExternalStorageDirectory() + File.separator + "images" + File.separator + receita.getImageName();
 //            System.out.println(d);
 
-            File imgFile = new  File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator + receita.getImageName());
-            if(imgFile.exists())
-            {
+            File imgFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator + receita.getImageName());
+            if (imgFile.exists()) {
                 imageRecipe.setImageURI(Uri.fromFile(imgFile));
             }
         }
@@ -141,7 +143,7 @@ public class ReceitaFormActivity extends AppCompatActivity {
 
     @OnClick(R.id.set_img_button)
     public void onSetImgButtonClicked() {
-        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RESULT_LOAD_IMAGE);
     }
 
@@ -169,9 +171,8 @@ public class ReceitaFormActivity extends AppCompatActivity {
         receita.setFav(false);
         receita.setUltimoAcesso(new Date());
 
-        if(receita.getImageBitmap() != null) {
+        if (receita.getImageBitmap() != null) {
             receita.setImageName(UUID.randomUUID().toString() + "." + receita.getImageExtension());
-            System.out.println("oi: " + receita.getImageName());
 
             OutputStream fOut = null;
             Uri outputFileUri;
@@ -221,7 +222,7 @@ public class ReceitaFormActivity extends AppCompatActivity {
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
 
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
@@ -236,6 +237,15 @@ public class ReceitaFormActivity extends AppCompatActivity {
                 Bitmap bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 this.receita.setImageBitmap(bmp);
                 imageRecipe.setImageBitmap(bmp);
+                Palette.from(bmp).maximumColorCount(32).generate(new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        Palette.Swatch vibrant = palette.getVibrantSwatch();
+                        if (vibrant != null) {
+                            activityTitle.setTextColor(vibrant.getTitleTextColor());
+                        }
+                    }
+                });
             } catch (IOException e) {
                 Toast.makeText(this, "Não foi possível abrir a sua imgem.", Toast.LENGTH_LONG).show();
             }

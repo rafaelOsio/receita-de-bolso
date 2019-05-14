@@ -97,6 +97,7 @@ public class ReceitasFragment extends Fragment implements IReceitaOnClickListene
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             btnNewRecipe.setOnClickListener(v -> {
+                dialog.hide();
                 startActivity(new Intent(getActivity(), ReceitaFormActivity.class));
             });
 

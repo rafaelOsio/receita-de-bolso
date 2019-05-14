@@ -135,7 +135,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaViewHolder> 
             TextView title = addCategoryView.findViewById(R.id.txt_view_title);
             EditText categoryName = addCategoryView.findViewById(R.id.category_name_field);
             EditText categoryDescription = addCategoryView.findViewById(R.id.category_description_field);
-            Button addCategory = addCategoryView.findViewById(R.id.btn_save_category);
+            Button addCategory = addCategoryView.findViewById(R.id.btn_confirm);
             Button btnCancel = addCategoryView.findViewById(R.id.btn_cancel);
 
             addCategory.setText("Salvar");
