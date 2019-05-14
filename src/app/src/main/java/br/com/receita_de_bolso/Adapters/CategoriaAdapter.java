@@ -22,7 +22,9 @@ import java.util.ArrayList;
 
 import br.com.receita_de_bolso.Activities.GetRecipeByCategory;
 import br.com.receita_de_bolso.DAO.CategoriaDAO;
+import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Categoria;
+import br.com.receita_de_bolso.Domain.Receita;
 import br.com.receita_de_bolso.R;
 import br.com.receita_de_bolso.ViewHolders.CategoriaViewHolder;
 
@@ -31,13 +33,15 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaViewHolder> 
     private Context context;
     private ArrayList<Categoria> categorias;
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-    public CategoriaDAO categoriaDAO;
+    private CategoriaDAO categoriaDAO;
+    private ReceitaDAO receitaDAO;
 
     public CategoriaAdapter(Context context, ArrayList<Categoria> categorias) {
         this.context = context;
         this.categorias = categorias;
         viewBinderHelper.setOpenOnlyOne(true);
         this.categoriaDAO = new CategoriaDAO(context);
+        this.receitaDAO = new ReceitaDAO(context);
     }
 
     public void setItems(ArrayList<Categoria> categorias) {
@@ -59,6 +63,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaViewHolder> 
         viewBinderHelper.bind(categoriaViewHolder.swipeRevealLayout, this.categorias.get(i).getNome());
 
         categoriaViewHolder.card.setOnClickListener(v -> {
+            categoriaViewHolder.swipeRevealLayout.close(true);
             Intent intent = new Intent(context, GetRecipeByCategory.class);
             intent.putExtra("id", this.categorias.get(i).getId());
             context.startActivity(intent);
@@ -94,9 +99,33 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaViewHolder> 
         });
 
         categoriaViewHolder.btnDelete.setOnClickListener(v -> {
-            categoriaDAO.delete(categorias.get(i).getId());
-            categoriaViewHolder.swipeRevealLayout.close(true);
-            setItems(categoriaDAO.getAll());
+            ArrayList<Receita> receitas = receitaDAO.getByCategoryId(this.categorias.get(i).getId());
+
+            if (receitas.isEmpty()) {
+                categoriaDAO.delete(categorias.get(i).getId());
+                categoriaViewHolder.swipeRevealLayout.close(true);
+                setItems(categoriaDAO.getAll());
+            } else {
+                AlertDialog.Builder showMessageDialog = new AlertDialog.Builder(context);
+                View showMessageview = LayoutInflater.from(context).inflate(R.layout.simple_message_dialog, null);
+
+                TextView message = showMessageview.findViewById(R.id.txt_message);
+                Button btnClose = showMessageview.findViewById(R.id.btn_close);
+
+                message.setText("Você não pode apagar uma categoria que possui receitas cadastradas!");
+
+                showMessageDialog.setView(showMessageview);
+                AlertDialog dialog = showMessageDialog.create();
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                btnClose.setOnClickListener(v1 -> {
+                    dialog.hide();
+                    categoriaViewHolder.swipeRevealLayout.close(true);
+                });
+
+                dialog.show();
+            }
         });
 
         categoriaViewHolder.btnEdit.setOnClickListener(v -> {

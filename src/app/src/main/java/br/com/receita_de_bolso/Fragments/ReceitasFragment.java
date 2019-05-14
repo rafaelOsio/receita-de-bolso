@@ -64,7 +64,6 @@ public class ReceitasFragment extends Fragment implements IReceitaOnClickListene
     public void onViewClicked() {
         categoriaDAO = new CategoriaDAO(getContext());
         categorias = categoriaDAO.getAll();
-
         if (categorias.isEmpty()) {
             AlertDialog.Builder simpleMessageDialog = new AlertDialog.Builder(getActivity());
             View simpleMessageView = LayoutInflater.from(getActivity()).inflate(R.layout.simple_message_dialog, null);
@@ -86,7 +85,26 @@ public class ReceitasFragment extends Fragment implements IReceitaOnClickListene
 
             return;
         } else {
-            startActivity(new Intent(getActivity(), ReceitaFormActivity.class));
+            AlertDialog.Builder decisionDialog = new AlertDialog.Builder(getActivity());
+            View decisionView = LayoutInflater.from(getActivity()).inflate(R.layout.create_recipe_decision_dialog, null);
+
+            Button btnNewRecipe = decisionView.findViewById(R.id.btn_new_recipe);
+            Button btnNewRecipeFromWeb = decisionView.findViewById(R.id.btn_new_recipe_from_web);
+            Button btnClose = decisionView.findViewById(R.id.btn_close);
+
+            decisionDialog.setView(decisionView);
+            AlertDialog dialog = decisionDialog.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            btnNewRecipe.setOnClickListener(v -> {
+                startActivity(new Intent(getActivity(), ReceitaFormActivity.class));
+            });
+
+            btnClose.setOnClickListener(v1 -> {
+                dialog.hide();
+            });
+
+            dialog.show();
         }
     }
 
