@@ -2,6 +2,8 @@ package br.com.receita_de_bolso.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import br.com.receita_de_bolso.Activities.ReceitaFormActivity;
@@ -52,6 +55,8 @@ public class ReceitaAdapterAdapter extends RecyclerView.Adapter<ReceitaViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull ReceitaViewHolder receitaViewHolder, int i) {
+        Receita receita = this.receitas.get(i);
+
         receitaViewHolder.nome.setText(this.receitas.get(i).getNome());
 
         Boolean isFav = this.receitas.get(i).getFav();
@@ -77,6 +82,25 @@ public class ReceitaAdapterAdapter extends RecyclerView.Adapter<ReceitaViewHolde
         receitaViewHolder.favButton.setOnClickListener(v2 -> {
             this.receitas.get(i).setFav(!isFav);
             this.receitaOnClickListener.favoritoOnClick(this.receitas.get(i));
+        });
+
+        receitaViewHolder.shareButton.setOnClickListener(v3 -> {
+            String textoReceita = receita.getNome() + "\n\nIngredientes:\n" + receita.getIngredientes() + "\n\nModo de preparo:\n" + receita.getModoPreparo() + "\n\nTempo de preparo:\n" + receita.getTempoPreparo() + "\n\nRendimento:\n" + receita.getRendimento();
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, textoReceita);
+
+            if(receita.getImageName() != null) {
+                Uri imageUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator + receita.getImageName());
+                sharingIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+                sharingIntent.setType("image/*");
+            }
+            else {
+                sharingIntent.setType("text/plain");
+            }
+
+            context.startActivity(Intent.createChooser(sharingIntent, "Compartilhar via"));
+
         });
     }
 
