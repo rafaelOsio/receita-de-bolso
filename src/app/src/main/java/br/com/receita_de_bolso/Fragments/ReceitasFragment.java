@@ -50,7 +50,7 @@ public class ReceitasFragment extends Fragment implements IReceitaOnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ((MainActivity)getActivity()).updateStatusBarColor("#fafafa");
+        ((MainActivity)getActivity()).updateStatusBarColor("#FF972F");
         View view = inflater.inflate(R.layout.fragment_receitas, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;

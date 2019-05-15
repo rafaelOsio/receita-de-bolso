@@ -6,14 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.ReceitasFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:background="@color/colorSecundary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:text="O que vamos cozinhar?"
+        android:layout_marginBottom="8dp"
+        android:text="Receitas"
+        android:textColor="@color/colorPrimary"
         android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_add_recipe"
         app:layout_constraintEnd_toStartOf="@+id/btn_add_recipe"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btn_add_recipe" />
@@ -28,15 +41,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/search_input_bg"
+        android:elevation="2dp"
+        android:hint="Pesquise em suas receitas..."
+        android:padding="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/recipe_recyclerview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recipe_recyclerview" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipe_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
         android:paddingLeft="20dp"
+        android:paddingTop="60dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

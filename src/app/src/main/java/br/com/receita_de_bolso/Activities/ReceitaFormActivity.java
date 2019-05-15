@@ -147,10 +147,14 @@ public class ReceitaFormActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    @OnClick(R.id.set_img_button)
-    public void onSetImgButtonClicked() {
+    @OnClick(R.id.open_camera_btn)
+    public void onOpenCameraBtnClicked() {
+        abreCamera();
+    }
+
+    @OnClick(R.id.open_gallery_btn)
+    public void onOpenGalleryBtnClicked() {
         escolheFotoDaGaleria();
-        //abreCamera();
     }
 
     private void escolheFotoDaGaleria() {

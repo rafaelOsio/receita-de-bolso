@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import br.com.receita_de_bolso.Activities.MainActivity;
 import br.com.receita_de_bolso.Adapters.ReceitaAdapterAdapter;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Receita;
@@ -27,6 +28,7 @@ public class FavoritesFragment extends Fragment implements IReceitaOnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).updateStatusBarColor("#fafafa");
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         return view;
     }
