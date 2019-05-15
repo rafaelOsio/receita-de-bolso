@@ -22,6 +22,9 @@ public class TabFragment extends Fragment {
 
     private String texto;
 
+    public TabFragment() {
+    }
+
     public TabFragment(String texto) {
         this.texto = texto;
     }
@@ -39,4 +42,5 @@ public class TabFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         text.setText(texto);
     }
+
 }

@@ -1,13 +1,16 @@
 package br.com.receita_de_bolso.Activities;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,12 +24,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.palette.graphics.Palette;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -45,6 +51,7 @@ import butterknife.Unbinder;
 public class ReceitaFormActivity extends AppCompatActivity {
 
     private static final int RESULT_LOAD_IMAGE = 1;
+    private static final int TAKE_PICTURE = 2;
 
     Unbinder unbinder;
     @BindView(R.id.recipe_name)
@@ -70,6 +77,8 @@ public class ReceitaFormActivity extends AppCompatActivity {
     private ArrayList<Categoria> categorias;
     private CategorySpinnerAdapter categoryAdapter;
     private Receita receita;
+
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,9 +135,6 @@ public class ReceitaFormActivity extends AppCompatActivity {
             Categoria categoria = categoriaDAO.getById(receita.getCategoriaId());
             this.categorySpinner.setSelection(categoryAdapter.getPosition(categoria));
 
-//            String d = Environment.getExternalStorageDirectory() + File.separator + "images" + File.separator + receita.getImageName();
-//            System.out.println(d);
-
             File imgFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator + receita.getImageName());
             if (imgFile.exists()) {
                 imageRecipe.setImageURI(Uri.fromFile(imgFile));
@@ -143,8 +149,24 @@ public class ReceitaFormActivity extends AppCompatActivity {
 
     @OnClick(R.id.set_img_button)
     public void onSetImgButtonClicked() {
+        //escolheFotoDaGaleria();
+        //abreCamera();
+    }
+
+    private void escolheFotoDaGaleria() {
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RESULT_LOAD_IMAGE);
+    }
+
+    private void abreCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photo = new File(Environment.getExternalStorageDirectory(),  "foto.jpg");
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(ReceitaFormActivity.this, "br.com.receita_de_bolso.fileprovider", photo));
+
+        imageUri = FileProvider.getUriForFile(ReceitaFormActivity.this, "br.com.receita_de_bolso.fileprovider", photo);
+
+        startActivityForResult(intent, TAKE_PICTURE);
     }
 
     @OnClick(R.id.btn_salvar)
@@ -216,41 +238,77 @@ public class ReceitaFormActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+        if(resultCode == RESULT_OK) {
 
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            switch (requestCode) {
+                case RESULT_LOAD_IMAGE: {
 
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
+                    if (data != null) {
+                        Uri selectedImage = data.getData();
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            this.receita.setImageExtension(picturePath.substring(picturePath.lastIndexOf(".")));
+                        Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                        cursor.moveToFirst();
 
-            cursor.close();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String picturePath = cursor.getString(columnIndex);
+                        this.receita.setImageExtension(picturePath.substring(picturePath.lastIndexOf(".")));
 
-            try {
-                Bitmap bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                this.receita.setImageBitmap(bmp);
-                imageRecipe.setImageBitmap(bmp);
-                Palette.from(bmp).maximumColorCount(32).generate(new Palette.PaletteAsyncListener() {
-                    @Override
-                    public void onGenerated(Palette palette) {
-                        Palette.Swatch vibrant = palette.getVibrantSwatch();
-                        if (vibrant != null) {
-                            activityTitle.setTextColor(vibrant.getTitleTextColor());
+                        cursor.close();
+
+                        try {
+                            Bitmap bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                            this.receita.setImageBitmap(bmp);
+                            imageRecipe.setImageBitmap(bmp);
+                            Palette.from(bmp).maximumColorCount(32).generate(new Palette.PaletteAsyncListener() {
+                                @Override
+                                public void onGenerated(Palette palette) {
+                                    Palette.Swatch vibrant = palette.getVibrantSwatch();
+                                    if (vibrant != null) {
+                                        activityTitle.setTextColor(vibrant.getTitleTextColor());
+                                    }
+                                }
+                            });
+                        } catch (IOException e) {
+                            Toast.makeText(this, "Não foi possível abrir a sua imgem.", Toast.LENGTH_LONG).show();
                         }
                     }
-                });
-            } catch (IOException e) {
-                Toast.makeText(this, "Não foi possível abrir a sua imgem.", Toast.LENGTH_LONG).show();
+
+                    break;
+                }
+
+                case TAKE_PICTURE: {
+
+                    Uri selectedImage = imageUri;
+                    getContentResolver().notifyChange(selectedImage, null);
+                    ContentResolver cr = getContentResolver();
+                    Bitmap bitmap;
+                    try {
+                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+
+                        this.receita.setImageBitmap(bitmap);
+                        imageRecipe.setImageBitmap(bitmap);
+                        Palette.from(bitmap).maximumColorCount(32).generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette palette) {
+                                Palette.Swatch vibrant = palette.getVibrantSwatch();
+                                if (vibrant != null) {
+                                    activityTitle.setTextColor(vibrant.getTitleTextColor());
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Ocorreu um erro ao tirar a foto.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    break;
+                }
             }
         }
-
     }
 
     private void getPermissions() {
