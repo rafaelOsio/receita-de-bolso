@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import br.com.receita_de_bolso.Activities.MainActivity;
-import br.com.receita_de_bolso.Adapters.ReceitaAdapterAdapter;
+import br.com.receita_de_bolso.Adapters.ReceitaAdapter;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Receita;
 import br.com.receita_de_bolso.Interfaces.IReceitaOnClickListener;
@@ -23,7 +23,7 @@ import br.com.receita_de_bolso.R;
 
 public class FavoritesFragment extends Fragment implements IReceitaOnClickListener {
 
-    private ReceitaAdapterAdapter receitasAdapter;
+    private ReceitaAdapter receitasAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,7 +36,7 @@ public class FavoritesFragment extends Fragment implements IReceitaOnClickListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.receitasAdapter = new ReceitaAdapterAdapter(getContext(), new ArrayList<>(), this);
+        this.receitasAdapter = new ReceitaAdapter(getContext(), new ArrayList<>(), this);
         setupRecyclerViewReceitas();
     }
 

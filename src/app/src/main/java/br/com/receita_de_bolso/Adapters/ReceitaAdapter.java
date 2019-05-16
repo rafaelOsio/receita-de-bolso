@@ -25,7 +25,7 @@ import br.com.receita_de_bolso.Interfaces.IReceitaOnClickListener;
 import br.com.receita_de_bolso.R;
 import br.com.receita_de_bolso.ViewHolders.ReceitaViewHolder;
 
-public class ReceitaAdapterAdapter extends RecyclerView.Adapter<ReceitaViewHolder> {
+public class ReceitaAdapter extends RecyclerView.Adapter<ReceitaViewHolder> {
 
     private Context context;
     private ArrayList<Receita> receitas;
@@ -33,7 +33,7 @@ public class ReceitaAdapterAdapter extends RecyclerView.Adapter<ReceitaViewHolde
     private ReceitaDAO receitaDAO;
     private IReceitaOnClickListener receitaOnClickListener;
 
-    public ReceitaAdapterAdapter(Context context, ArrayList<Receita> receitas, IReceitaOnClickListener receitaOnClickListener) {
+    public ReceitaAdapter(Context context, ArrayList<Receita> receitas, IReceitaOnClickListener receitaOnClickListener) {
         this.context = context;
         this.receitas = receitas;
         this.receitaDAO = new ReceitaDAO(context);
