@@ -143,7 +143,7 @@ public class InicioFragment extends Fragment {
     }
 
     private void getData() {
-        receitas = receitaDAO.getAll();
+        receitas = receitaDAO.getAllRecentes();
         categorias = categoriaDAO.getAll();
         receitaMainAdapter.setItems(receitas);
         categoriaMainAdapter.setItems(categorias);

@@ -18,6 +18,15 @@ public class Receita {
     private Bitmap imageBitmap;
     private String imageName;
     private String imageExtension;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public String getImageExtension() {
         return imageExtension;

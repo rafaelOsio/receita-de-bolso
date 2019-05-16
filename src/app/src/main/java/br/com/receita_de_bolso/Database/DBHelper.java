@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create table " + CategoriaDAO.TABELA + " ( " + CategoriaDAO.ID + " integer primary key autoincrement, "  + CategoriaDAO.NOME + " varchar(100) not null, " + CategoriaDAO.DESCRICAO + " varchar(100));");
 
         //tabela receitas
-        db.execSQL("create table " + ReceitaDAO.TABELA + " ( " + ReceitaDAO.ID + " integer primary key autoincrement, " + ReceitaDAO.CATEGORIA_ID + " integer not null, " + ReceitaDAO.NOME + " varchar(100) not null, " + ReceitaDAO.TEMPO_PREPARO + " integer not null, " + ReceitaDAO.RENDIMENTO + " integer not null, " + ReceitaDAO.INGREDIENTES + " varchar(1000) not null, " + ReceitaDAO.MODO_PREPARO+ " varchar(1000) not null, " + ReceitaDAO.ULTIMO_ACESSO + " varchar(50) not null, " + ReceitaDAO.IS_FAV + " int default 0, " + ReceitaDAO.NOME_IMAGEM + " varchar(200) );");
+        db.execSQL("create table " + ReceitaDAO.TABELA + " ( " + ReceitaDAO.ID + " integer primary key autoincrement, " + ReceitaDAO.CATEGORIA_ID + " integer not null, " + ReceitaDAO.NOME + " varchar(100) not null, " + ReceitaDAO.TEMPO_PREPARO + " integer not null, " + ReceitaDAO.RENDIMENTO + " integer not null, " + ReceitaDAO.INGREDIENTES + " varchar(1000) not null, " + ReceitaDAO.MODO_PREPARO+ " varchar(1000) not null, " + ReceitaDAO.ULTIMO_ACESSO + " varchar(50) not null, " + ReceitaDAO.IS_FAV + " int default 0, " + ReceitaDAO.NOME_IMAGEM + " varchar(200), " + ReceitaDAO.URL + " varchar(2000) );");
     }
 
     @Override

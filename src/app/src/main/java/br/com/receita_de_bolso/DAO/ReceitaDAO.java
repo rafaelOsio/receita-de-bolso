@@ -30,6 +30,7 @@ public class ReceitaDAO {
     public static String ULTIMO_ACESSO = "ultimo_acesso";
     public static String IS_FAV = "is_fav";
     public static String NOME_IMAGEM = "nome_imagem";
+    public static String URL = "url";
 
     private static String PADRAO_DATA = "yyyy-MM-dd HH:mm:ss";
 
@@ -50,6 +51,7 @@ public class ReceitaDAO {
         valores.put(MODO_PREPARO, receita.getModoPreparo());
         valores.put(IS_FAV, receita.getFav());
         valores.put(NOME_IMAGEM, receita.getImageName());
+        valores.put(URL, receita.getUrl());
 
         DateFormat dateFormat = new SimpleDateFormat(PADRAO_DATA);
         String strDataUltimoAcesso = dateFormat.format(receita.getUltimoAcesso());
@@ -78,6 +80,7 @@ public class ReceitaDAO {
         valores.put(MODO_PREPARO, receita.getModoPreparo());
         valores.put(IS_FAV, receita.getFav());
         valores.put(NOME_IMAGEM, receita.getImageName());
+        valores.put(URL, receita.getUrl());
 
         DateFormat dateFormat = new SimpleDateFormat(PADRAO_DATA);
         String strDataUltimoAcesso = dateFormat.format(receita.getUltimoAcesso());
@@ -105,7 +108,7 @@ public class ReceitaDAO {
     public ArrayList<Receita> getAll() {
         db = banco.getReadableDatabase();
 
-        Cursor cursor = db.query(TABELA, new String[] { ID, NOME_IMAGEM, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO, IS_FAV}, null,null,null,null,null);
+        Cursor cursor = db.query(TABELA, new String[] { ID, URL, NOME_IMAGEM, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO, IS_FAV}, null,null,null,null,null);
         ArrayList<Receita> result = new ArrayList<>();
 
         if (cursor.moveToFirst()){
@@ -120,6 +123,7 @@ public class ReceitaDAO {
                 receita.setModoPreparo(cursor.getString(cursor.getColumnIndex(MODO_PREPARO)));
                 receita.setFav(cursor.getInt(cursor.getColumnIndex(IS_FAV)) == 1);
                 receita.setImageName(cursor.getString(cursor.getColumnIndex(NOME_IMAGEM)));
+                receita.setUrl(cursor.getString(cursor.getColumnIndex(URL)));
 
                 SimpleDateFormat formatter = new SimpleDateFormat(PADRAO_DATA);
 
@@ -143,7 +147,7 @@ public class ReceitaDAO {
     public ArrayList<Receita> getAllRecentes() {
         db = banco.getReadableDatabase();
 
-        Cursor cursor = db.query(TABELA, new String[] { ID, NOME_IMAGEM, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO, IS_FAV}, null,null,null,null,  ULTIMO_ACESSO + " DESC ", "10");
+        Cursor cursor = db.query(TABELA, new String[] { ID, URL, NOME_IMAGEM, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO, IS_FAV}, null,null,null,null,  ULTIMO_ACESSO + " DESC ", "10");
         ArrayList<Receita> result = new ArrayList<>();
 
         if (cursor.moveToFirst()){
@@ -158,6 +162,7 @@ public class ReceitaDAO {
                 receita.setModoPreparo(cursor.getString(cursor.getColumnIndex(MODO_PREPARO)));
                 receita.setFav(cursor.getInt(cursor.getColumnIndex(IS_FAV)) == 1);
                 receita.setImageName(cursor.getString(cursor.getColumnIndex(NOME_IMAGEM)));
+                receita.setUrl(cursor.getString(cursor.getColumnIndex(URL)));
 
                 SimpleDateFormat formatter = new SimpleDateFormat(PADRAO_DATA);
 
@@ -182,7 +187,7 @@ public class ReceitaDAO {
 
         String where = ID + "=" + id;
         db = banco.getReadableDatabase();
-        Cursor cursor = db.query(TABELA, new String[] { ID, NOME_IMAGEM, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO, IS_FAV}, where, null,null,null,null,null);
+        Cursor cursor = db.query(TABELA, new String[] { ID, URL, NOME_IMAGEM, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO, IS_FAV}, where, null,null,null,null,null);
 
         if(cursor.moveToFirst()){
 
@@ -196,6 +201,7 @@ public class ReceitaDAO {
             receita.setModoPreparo(cursor.getString(cursor.getColumnIndex(MODO_PREPARO)));
             receita.setFav(cursor.getInt(cursor.getColumnIndex(IS_FAV)) == 1);
             receita.setImageName(cursor.getString(cursor.getColumnIndex(NOME_IMAGEM)));
+            receita.setUrl(cursor.getString(cursor.getColumnIndex(URL)));
 
             SimpleDateFormat formatter = new SimpleDateFormat(PADRAO_DATA);
 
@@ -219,7 +225,7 @@ public class ReceitaDAO {
         db = banco.getReadableDatabase();
 
         String where = CATEGORIA_ID + "=" + id;
-        Cursor cursor = db.query(TABELA, new String[] { ID, NOME_IMAGEM, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO, IS_FAV }, where, null,null,null,null,null);
+        Cursor cursor = db.query(TABELA, new String[] { ID, URL, NOME_IMAGEM, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO, IS_FAV }, where, null,null,null,null,null);
         ArrayList<Receita> result = new ArrayList<>();
 
         if (cursor.moveToFirst()){
@@ -234,6 +240,7 @@ public class ReceitaDAO {
                 receita.setModoPreparo(cursor.getString(cursor.getColumnIndex(MODO_PREPARO)));
                 receita.setFav(cursor.getInt(cursor.getColumnIndex(IS_FAV)) == 1);
                 receita.setImageName(cursor.getString(cursor.getColumnIndex(NOME_IMAGEM)));
+                receita.setUrl(cursor.getString(cursor.getColumnIndex(URL)));
 
                 SimpleDateFormat formatter = new SimpleDateFormat(PADRAO_DATA);
 
@@ -258,7 +265,7 @@ public class ReceitaDAO {
         db = banco.getReadableDatabase();
 
         String where = IS_FAV + "=" + 1;
-        Cursor cursor = db.query(TABELA, new String[] { ID, NOME_IMAGEM, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO, IS_FAV }, where, null,null,null,null,null);
+        Cursor cursor = db.query(TABELA, new String[] { ID, URL, NOME_IMAGEM, CATEGORIA_ID, NOME, TEMPO_PREPARO, RENDIMENTO, INGREDIENTES, MODO_PREPARO, ULTIMO_ACESSO, IS_FAV }, where, null,null,null,null,null);
         ArrayList<Receita> result = new ArrayList<>();
 
         if (cursor.moveToFirst()){
@@ -273,6 +280,7 @@ public class ReceitaDAO {
                 receita.setModoPreparo(cursor.getString(cursor.getColumnIndex(MODO_PREPARO)));
                 receita.setFav(cursor.getInt(cursor.getColumnIndex(IS_FAV)) == 1);
                 receita.setImageName(cursor.getString(cursor.getColumnIndex(NOME_IMAGEM)));
+                receita.setUrl(cursor.getString(cursor.getColumnIndex(URL)));
 
                 SimpleDateFormat formatter = new SimpleDateFormat(PADRAO_DATA);
 
