@@ -96,16 +96,27 @@ public class ReceitasFragment extends Fragment implements IReceitaOnClickListene
             AlertDialog dialog = decisionDialog.create();
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+            dialog.show();
+
             btnNewRecipe.setOnClickListener(v -> {
                 dialog.hide();
-                startActivity(new Intent(getActivity(), ReceitaFormActivity.class));
+                Intent intent = new Intent(getActivity(), ReceitaFormActivity.class);
+                intent.putExtra("isWeb", false);
+                intent.putExtra("id", Long.valueOf(-1));
+                startActivity(intent);
+            });
+
+            btnNewRecipeFromWeb.setOnClickListener(v2 -> {
+                dialog.hide();
+                Intent intent = new Intent(getActivity(), ReceitaFormActivity.class);
+                intent.putExtra("isWeb", true);
+                intent.putExtra("id", Long.valueOf(-1));
+                startActivity(intent);
             });
 
             btnClose.setOnClickListener(v1 -> {
                 dialog.hide();
             });
-
-            dialog.show();
         }
     }
 
@@ -117,7 +128,6 @@ public class ReceitasFragment extends Fragment implements IReceitaOnClickListene
     }
 
     private void setupRecyclerViewReceitas() {
-
         RecyclerView recyclerViewReceitas = getActivity().findViewById(R.id.recipe_recyclerview);
         LinearLayoutManager linearLayoutManagerCategorias = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
@@ -130,7 +140,6 @@ public class ReceitasFragment extends Fragment implements IReceitaOnClickListene
     @Override
     public void onResume() {
         super.onResume();
-
         getAllReceitas();
     }
 

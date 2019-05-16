@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,16 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.palette.graphics.Palette;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -70,8 +67,11 @@ public class ReceitaFormActivity extends AppCompatActivity {
     ImageView imageRecipe;
     @BindView(R.id.activity_title)
     TextView activityTitle;
+    @BindView(R.id.url_from_web)
+    EditText urlFromWeb;
     private Categoria selectedCategory;
     private long Id = -1;
+    private boolean isWeb;
     private ReceitaDAO receitaDAO;
     private CategoriaDAO categoriaDAO;
     private ArrayList<Categoria> categorias;
@@ -94,9 +94,12 @@ public class ReceitaFormActivity extends AppCompatActivity {
         this.getPermissions();
 
         if (getIntent().getExtras() != null) {
-            Log.e("teste", String.valueOf(getIntent().getExtras().getLong("id")));
+            Log.e("é esse", String.valueOf(getIntent().getExtras().getLong("id")));
             this.Id = getIntent().getExtras().getLong("id");
+            this.isWeb = getIntent().getExtras().getBoolean("isWeb");
         }
+
+        handleVisibility();
 
         categorias = categoriaDAO.getAll();
 
@@ -123,10 +126,8 @@ public class ReceitaFormActivity extends AppCompatActivity {
 
         if (this.Id != -1) {
             Receita receita = receitaDAO.getById(this.Id);
-            Log.e("id", String.valueOf(this.Id));
             if (receita == null)
                 return;
-            Log.e("id", String.valueOf(this.Id));
             this.recipeName.setText(receita.getNome());
             this.recipeIngredients.setText(receita.getIngredientes());
             this.recipeMethodOfPreparation.setText(receita.getModoPreparo());
@@ -139,6 +140,16 @@ public class ReceitaFormActivity extends AppCompatActivity {
             if (imgFile.exists()) {
                 imageRecipe.setImageURI(Uri.fromFile(imgFile));
             }
+        }
+    }
+
+    public void handleVisibility() {
+        if (this.isWeb) {
+            urlFromWeb.setVisibility(View.VISIBLE);
+            recipePreparationTime.setVisibility(View.GONE);
+            recipeMethodOfPreparation.setVisibility(View.GONE);
+            recipePortions.setVisibility(View.GONE);
+            recipeIngredients.setVisibility(View.GONE);
         }
     }
 
@@ -164,7 +175,7 @@ public class ReceitaFormActivity extends AppCompatActivity {
 
     private void abreCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(Environment.getExternalStorageDirectory(),  "foto.jpg");
+        File photo = new File(Environment.getExternalStorageDirectory(), "foto.jpg");
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(ReceitaFormActivity.this, "br.com.receita_de_bolso.fileprovider", photo));
 
@@ -176,26 +187,39 @@ public class ReceitaFormActivity extends AppCompatActivity {
     @OnClick(R.id.btn_salvar)
     public void onBtnSalvarClicked() {
         String name = recipeName.getText().toString();
-        String ingredients = recipeIngredients.getText().toString();
-        String methodOfPreparation = recipeMethodOfPreparation.getText().toString();
-        String portions = recipePortions.getText().toString();
-        String preparationTime = recipePreparationTime.getText().toString();
         Categoria categoria = selectedCategory;
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(ingredients) || TextUtils.isEmpty(methodOfPreparation) || TextUtils.isEmpty(portions) || TextUtils.isEmpty(preparationTime)) {
-            Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         receita.setNome(name);
-        receita.setIngredientes(ingredients);
-        receita.setModoPreparo(methodOfPreparation);
-        receita.setRendimento(Integer.parseInt(portions));
-        receita.setTempoPreparo(Integer.parseInt(preparationTime));
         receita.setCategoria(categoria);
         receita.setCategoriaId(categoria.getId());
         receita.setFav(false);
         receita.setUltimoAcesso(new Date());
+
+        if (!isWeb) {
+            String ingredients = recipeIngredients.getText().toString();
+            String methodOfPreparation = recipeMethodOfPreparation.getText().toString();
+            String portions = recipePortions.getText().toString();
+            String preparationTime = recipePreparationTime.getText().toString();
+
+            receita.setIngredientes(ingredients);
+            receita.setModoPreparo(methodOfPreparation);
+            receita.setRendimento(Integer.parseInt(portions));
+            receita.setTempoPreparo(Integer.parseInt(preparationTime));
+
+            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(ingredients) || TextUtils.isEmpty(methodOfPreparation) || TextUtils.isEmpty(portions) || TextUtils.isEmpty(preparationTime)) {
+                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } else {
+            String url = urlFromWeb.getText().toString();
+
+            receita.setUrl(url);
+
+            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(url)) {
+                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
 
         if (receita.getImageBitmap() != null) {
             receita.setImageName(UUID.randomUUID().toString() + "." + receita.getImageExtension());
@@ -246,7 +270,7 @@ public class ReceitaFormActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
 
             switch (requestCode) {
                 case RESULT_LOAD_IMAGE: {
@@ -292,7 +316,7 @@ public class ReceitaFormActivity extends AppCompatActivity {
                     ContentResolver cr = getContentResolver();
                     Bitmap bitmap;
                     try {
-                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+                        bitmap = MediaStore.Images.Media.getBitmap(cr, selectedImage);
 
                         this.receita.setImageBitmap(bitmap);
                         imageRecipe.setImageBitmap(bitmap);
