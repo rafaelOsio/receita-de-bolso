@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,7 +23,7 @@ import java.util.ArrayList;
 
 import br.com.receita_de_bolso.Activities.MainActivity;
 import br.com.receita_de_bolso.Activities.ReceitaFormActivity;
-import br.com.receita_de_bolso.Adapters.ReceitaAdapterAdapter;
+import br.com.receita_de_bolso.Adapters.ReceitaAdapter;
 import br.com.receita_de_bolso.DAO.CategoriaDAO;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Categoria;
@@ -39,7 +37,7 @@ import butterknife.Unbinder;
 public class ReceitasFragment extends Fragment implements IReceitaOnClickListener {
 
     private Unbinder unbinder;
-    private ReceitaAdapterAdapter receitasAdapter;
+    private ReceitaAdapter receitasAdapter;
     private CategoriaDAO categoriaDAO;
     private ArrayList<Categoria> categorias;
 
@@ -123,7 +121,7 @@ public class ReceitasFragment extends Fragment implements IReceitaOnClickListene
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.receitasAdapter = new ReceitaAdapterAdapter(getContext(), new ArrayList<>(), this);
+        this.receitasAdapter = new ReceitaAdapter(getContext(), new ArrayList<>(), this);
         setupRecyclerViewReceitas();
     }
 

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import br.com.receita_de_bolso.Adapters.ReceitaAdapterAdapter;
+import br.com.receita_de_bolso.Adapters.ReceitaAdapter;
 import br.com.receita_de_bolso.DAO.CategoriaDAO;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Categoria;
@@ -27,7 +27,7 @@ public class GetRecipeByCategory extends AppCompatActivity implements IReceitaOn
     TextView activityTitle;
     @BindView(R.id.activity_subtitle)
     TextView activitySubtitle;
-    private ReceitaAdapterAdapter receitasAdapter;
+    private ReceitaAdapter receitasAdapter;
     private ReceitaDAO receitaDAO;
     private CategoriaDAO categoryDAO;
     private Long Id;
@@ -49,7 +49,7 @@ public class GetRecipeByCategory extends AppCompatActivity implements IReceitaOn
         this.activityTitle.setText(this.category.getNome());
         this.activitySubtitle.setText(this.category.getDescricao());
 
-        this.receitasAdapter = new ReceitaAdapterAdapter(this, new ArrayList<>(), this);
+        this.receitasAdapter = new ReceitaAdapter(this, new ArrayList<>(), this);
         setupRecyclerViewReceitas();
     }
 
