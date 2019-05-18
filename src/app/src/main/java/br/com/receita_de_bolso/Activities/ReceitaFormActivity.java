@@ -127,7 +127,7 @@ public class ReceitaFormActivity extends AppCompatActivity {
 
         if (this.Id != -1) {
             activityTitle.setText("Editar receita");
-            Receita receita = receitaDAO.getById(this.Id);
+            receita = receitaDAO.getById(this.Id);
             if (receita == null)
                 return;
             this.recipeName.setText(receita.getNome());

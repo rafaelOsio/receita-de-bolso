@@ -3,7 +3,7 @@
     tools:context=".Fragments.ReceitasFragment"
     android:orientation="vertical"
     android:background="@color/colorPrimary"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,7 +11,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:orientation="vertical"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:visibility="visible"
         android:id="@+id/layoutContentPerfilUsuario">
@@ -104,81 +104,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:paddingLeft="20dp"
                 android:id="@+id/recipe_recyclerview"/>
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>
 
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context=".Fragments.ReceitasFragment">-->
-
-    <!--<androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--android:id="@+id/constraintLayout"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="120dp"-->
-        <!--android:background="@color/colorSecundary"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="0.0"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/textView3"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginStart="20dp"-->
-        <!--android:layout_marginEnd="20dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:text="Receitas"-->
-        <!--android:textColor="@color/colorPrimary"-->
-        <!--android:textSize="30sp"-->
-        <!--app:layout_constraintBottom_toBottomOf="@+id/btn_add_recipe"-->
-        <!--app:layout_constraintEnd_toStartOf="@+id/btn_add_recipe"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/btn_add_recipe" />-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/btn_add_recipe"-->
-        <!--android:layout_width="48dp"-->
-        <!--android:layout_height="48dp"-->
-        <!--android:layout_marginTop="20dp"-->
-        <!--android:layout_marginEnd="20dp"-->
-        <!--android:src="@drawable/ic_rounded_btn_add"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--<EditText-->
-        <!--android:id="@+id/search"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginStart="20dp"-->
-        <!--android:layout_marginEnd="20dp"-->
-        <!--android:background="@drawable/search_input_bg"-->
-        <!--android:elevation="2dp"-->
-        <!--android:inputType="text"-->
-        <!--android:hint="Pesquise em suas receitas..."-->
-        <!--android:padding="15dp"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/recipe_recyclerview"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/recipe_recyclerview" />-->
-
-    <!--<androidx.recyclerview.widget.RecyclerView-->
-        <!--android:id="@+id/recipe_recyclerview"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:clipToPadding="false"-->
-        <!--android:paddingLeft="20dp"-->
-        <!--android:paddingTop="60dp"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/constraintLayout"-->
-        <!--app:layout_constraintVertical_bias="0.47000003" />-->
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
 
