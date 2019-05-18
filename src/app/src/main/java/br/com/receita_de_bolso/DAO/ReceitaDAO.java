@@ -208,6 +208,7 @@ public class ReceitaDAO {
             try {
                 Date date = new Date(formatter.parse(cursor.getString(cursor.getColumnIndex(ULTIMO_ACESSO))).getTime());
                 receita.setUltimoAcesso(date);
+                this.update(receita);
             } catch (ParseException e) {
                 //hihi
             }

@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -125,6 +126,7 @@ public class ReceitaFormActivity extends AppCompatActivity {
         });
 
         if (this.Id != -1) {
+            activityTitle.setText("Editar receita");
             Receita receita = receitaDAO.getById(this.Id);
             if (receita == null)
                 return;
@@ -133,6 +135,7 @@ public class ReceitaFormActivity extends AppCompatActivity {
             this.recipeMethodOfPreparation.setText(receita.getModoPreparo());
             this.recipePortions.setText(String.valueOf(receita.getRendimento()));
             this.recipePreparationTime.setText(String.valueOf(receita.getTempoPreparo()));
+            this.urlFromWeb.setText(receita.getUrl());
             Categoria categoria = categoriaDAO.getById(receita.getCategoriaId());
             this.categorySpinner.setSelection(categoryAdapter.getPosition(categoria));
 
@@ -212,8 +215,12 @@ public class ReceitaFormActivity extends AppCompatActivity {
             }
         } else {
             String url = urlFromWeb.getText().toString();
-
             receita.setUrl(url);
+
+            if (!URLUtil.isValidUrl(url)) {
+                Toast.makeText(this, "Digite uma URL válida!! :(", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             if (TextUtils.isEmpty(name) || TextUtils.isEmpty(url)) {
                 Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
@@ -265,7 +272,6 @@ public class ReceitaFormActivity extends AppCompatActivity {
 
         super.onBackPressed();
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

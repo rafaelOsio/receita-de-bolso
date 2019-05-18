@@ -12,7 +12,7 @@
 
         <ImageView
             android:id="@+id/recipe_photo"
-            android:src="@drawable/img_categories_bg"
+            android:background="@color/colorSecundary"
             android:scaleType="centerCrop"
             android:layout_width="0dp"
             android:layout_height="285dp"

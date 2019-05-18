@@ -14,6 +14,10 @@ public class ReceitaFilter extends Filter {
     private ReceitaAdapter adapter;
     private ArrayList<Receita> receitas;
 
+    public void setItems(ArrayList<Receita> receitas) {
+        this.receitas = receitas;
+    }
+
     public ReceitaFilter(ReceitaAdapter adapter, ArrayList<Receita> receitas) {
         super();
 
@@ -47,7 +51,7 @@ public class ReceitaFilter extends Filter {
 
     @Override
     protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-
+        this.adapter.setItems((ArrayList<Receita>) filterResults.values);
     }
 
     @Override

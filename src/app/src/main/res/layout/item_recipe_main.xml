@@ -24,9 +24,10 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/imageView6"
-            android:src="@drawable/img_categories_bg"
-            android:scaleType="centerCrop"
+            android:id="@+id/recipe_photo"
+            android:background="#fafafa"
+            android:src="@drawable/ic_logo"
+            android:scaleType="centerInside"
         />
     </androidx.cardview.widget.CardView>
 

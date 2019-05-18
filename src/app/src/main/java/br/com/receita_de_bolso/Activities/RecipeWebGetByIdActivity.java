@@ -2,7 +2,6 @@ package br.com.receita_de_bolso.Activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -12,39 +11,31 @@ import android.os.Environment;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager.widget.ViewPager;
-
-import com.google.android.material.tabs.TabLayout;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.util.Date;
 
-import br.com.receita_de_bolso.Adapters.TabsAdapter;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Receita;
-import br.com.receita_de_bolso.Fragments.TabFragment;
 import br.com.receita_de_bolso.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RecipeGetByIdActivity extends FragmentActivity {
-    @BindView(R.id.recipe_name)
-    TextView recipeName;
-    @BindView(R.id.recipe_preparation_time)
-    TextView recipePreparationTime;
-    @BindView(R.id.recipe_portions)
-    TextView recipePortions;
+public class RecipeWebGetByIdActivity extends AppCompatActivity {
+
+    @BindView(R.id.webpage)
+    WebView webpage;
     @BindView(R.id.favorite_button)
     Button favoriteButton;
     @BindView(R.id.recipe_photo)
     ImageView recipePhoto;
-    private Long Id;
+    private Long id;
     private ReceitaDAO receitaDAO;
     private Receita receita;
 
@@ -52,52 +43,31 @@ public class RecipeGetByIdActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.updateStatusBarColor("#FF972F");
-        setContentView(R.layout.activity_get_by_id_recipe);
+        setContentView(R.layout.activity_recipe_web_get_by_id);
         ButterKnife.bind(this);
-        receitaDAO = new ReceitaDAO(getBaseContext());
 
-        getData();
+        receitaDAO = new ReceitaDAO(this);
 
-        Resources resources = getResources();
-        TabsAdapter adapter = new TabsAdapter(getSupportFragmentManager());
-
-        TabFragment fragmentIngredientes = new TabFragment(this.receita.getIngredientes());
-        TabFragment fragmentModoPreparo = new TabFragment(this.receita.getModoPreparo());
-
-        adapter.add(fragmentIngredientes, "Ingredientes");
-        adapter.add(fragmentModoPreparo, "Modo de preparo");
-
-        ViewPager viewPager = findViewById(R.id.viewpager);
-        viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-        this.receita.setUltimoAcesso(new Date());
-        receitaDAO.update(this.receita);
-    }
-
-    @OnClick(R.id.back_button)
-    public void onBackButtonClicked() {
-        super.onBackPressed();
-    }
-
-    public void getData() {
         if (getIntent().getExtras() != null) {
-            this.Id = getIntent().getExtras().getLong("id");
-            this.receita = receitaDAO.getById(this.Id);
+            this.id = getIntent().getExtras().getLong("id");
         }
 
-        recipeName.setText(this.receita.getNome());
-        recipePortions.setText(this.receita.getRendimento() + " por.");
-        recipePreparationTime.setText(this.receita.getTempoPreparo() + " min.");
+        receita = receitaDAO.getById(this.id);
+        webpage.getSettings().setJavaScriptEnabled(true);
+        webpage.loadUrl(receita.getUrl());
+
+        receita.setUltimoAcesso(new Date());
+        receitaDAO.update(receita);
 
         File imgFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator + receita.getImageName());
         if (imgFile.exists()) {
             recipePhoto.setImageURI(Uri.fromFile(imgFile));
         }
+    }
 
-        setFavButtonImage();
+    @OnClick(R.id.back_button)
+    public void onBackButtonClicked() {
+        onBackPressed();
     }
 
     @OnClick(R.id.remove_button)
@@ -118,26 +88,13 @@ public class RecipeGetByIdActivity extends FragmentActivity {
         });
 
         btnConfirm.setOnClickListener(v1 -> {
-            receitaDAO.delete(this.Id);
+            receitaDAO.delete(this.id);
             dialog.hide();
             onBackButtonClicked();
             return;
         });
 
         dialog.show();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getData();
-    }
-
-    public void setFavButtonImage() {
-        if (this.receita.getFav())
-            this.favoriteButton.setBackgroundResource(R.drawable.ic_rounded_heart);
-        else
-            this.favoriteButton.setBackgroundResource(R.drawable.ic_rounded_heart_outline);
     }
 
     @OnClick(R.id.edit_button)
@@ -160,6 +117,13 @@ public class RecipeGetByIdActivity extends FragmentActivity {
         receitaDAO.update(this.receita);
 
         setFavButtonImage();
+    }
+
+    public void setFavButtonImage() {
+        if (this.receita.getFav())
+            this.favoriteButton.setBackgroundResource(R.drawable.ic_rounded_heart);
+        else
+            this.favoriteButton.setBackgroundResource(R.drawable.ic_rounded_heart_outline);
     }
 
     public void updateStatusBarColor(String color){// Color must be in hexadecimal fromat

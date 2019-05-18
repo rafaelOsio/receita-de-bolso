@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 import br.com.receita_de_bolso.Activities.ReceitaFormActivity;
 import br.com.receita_de_bolso.Activities.RecipeGetByIdActivity;
+import br.com.receita_de_bolso.Activities.RecipeWebGetByIdActivity;
 import br.com.receita_de_bolso.DAO.ReceitaDAO;
 import br.com.receita_de_bolso.Domain.Receita;
 import br.com.receita_de_bolso.Interfaces.IReceitaOnClickListener;
@@ -59,6 +61,14 @@ public class ReceitaAdapter extends RecyclerView.Adapter<ReceitaViewHolder> {
 
         receitaViewHolder.nome.setText(this.receitas.get(i).getNome());
 
+        File imgFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator + receita.getImageName());
+        if (imgFile.exists()) {
+            receitaViewHolder.image.setImageURI(Uri.fromFile(imgFile));
+            receitaViewHolder.image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } else {
+            receitaViewHolder.image.setImageResource(R.drawable.ic_logo);
+        }
+
         Boolean isFav = this.receitas.get(i).getFav();
 
         if (isFav)
@@ -67,16 +77,11 @@ public class ReceitaAdapter extends RecyclerView.Adapter<ReceitaViewHolder> {
             receitaViewHolder.favButton.setBackgroundResource(R.drawable.ic_heart_outline);
 
         receitaViewHolder.container.setOnClickListener(v -> {
-            Intent intent = new Intent(context, RecipeGetByIdActivity.class);
-            intent.putExtra("id", this.receitas.get(i).getId());
-            Log.e("idAntes", String.valueOf(intent.getExtras().getLong("id")));
-            context.startActivity(intent);
+            openGetById(receita, i);
         });
 
         receitaViewHolder.image.setOnClickListener(v1 -> {
-            Intent intent = new Intent(context, RecipeGetByIdActivity.class);
-            intent.putExtra("id", this.receitas.get(i).getId());
-            context.startActivity(intent);
+            openGetById(receita, i);
         });
 
         receitaViewHolder.favButton.setOnClickListener(v2 -> {
@@ -85,7 +90,14 @@ public class ReceitaAdapter extends RecyclerView.Adapter<ReceitaViewHolder> {
         });
 
         receitaViewHolder.shareButton.setOnClickListener(v3 -> {
-            String textoReceita = receita.getNome() + "\n\nIngredientes:\n" + receita.getIngredientes() + "\n\nModo de preparo:\n" + receita.getModoPreparo() + "\n\nTempo de preparo:\n" + receita.getTempoPreparo() + "\n\nRendimento:\n" + receita.getRendimento();
+            String textoReceita;
+
+            if (isWeb(receita)) {
+                textoReceita = receita.getNome() + "\n\nLink para acessar:\n" + receita.getUrl();
+            } else {
+                textoReceita = receita.getNome() + "\n\nIngredientes:\n" + receita.getIngredientes() + "\n\nModo de preparo:\n" + receita.getModoPreparo() + "\n\nTempo de preparo:\n" + receita.getTempoPreparo() + "\n\nRendimento:\n" + receita.getRendimento();
+            }
+
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
 
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, textoReceita);
@@ -107,5 +119,26 @@ public class ReceitaAdapter extends RecyclerView.Adapter<ReceitaViewHolder> {
     @Override
     public int getItemCount() {
         return receitas.size();
+    }
+
+    public Boolean isWeb(Receita receita) {
+        if (receita.getUrl() != null && !receita.getUrl().equals("")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void openGetById(Receita receita, Integer i) {
+        if (isWeb(receita)) {
+            Intent intent = new Intent(context, RecipeWebGetByIdActivity.class);
+            intent.putExtra("id", Long.valueOf(receita.getId()));
+            context.startActivity(intent);
+        } else {
+            Intent intent = new Intent(context, RecipeGetByIdActivity.class);
+            intent.putExtra("id", this.receitas.get(i).getId());
+            Log.e("idAntes", String.valueOf(intent.getExtras().getLong("id")));
+            context.startActivity(intent);
+        }
     }
 }
