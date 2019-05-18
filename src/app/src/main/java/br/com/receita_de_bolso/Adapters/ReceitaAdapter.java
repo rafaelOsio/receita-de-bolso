@@ -2,8 +2,10 @@ package br.com.receita_de_bolso.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +13,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import br.com.receita_de_bolso.Activities.ReceitaFormActivity;
@@ -99,12 +105,21 @@ public class ReceitaAdapter extends RecyclerView.Adapter<ReceitaViewHolder> {
             }
 
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, textoReceita);
 
             if(receita.getImageName() != null) {
-                Uri imageUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator + receita.getImageName());
-                sharingIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+                //Uri imageUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator + receita.getImageName());
+                String t = receita.getImageName();
+                System.out.println(t);
+                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "images" + File.separator;
+                File f = new File(path, receita.getImageName());
+//                Uri data = Uri.fromFile(f);
+                Uri contentUri = FileProvider.getUriForFile(context, "br.com.receita_de_bolso.fileprovider", f);
+
+
+                sharingIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                sharingIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 sharingIntent.setType("image/*");
             }
             else {
