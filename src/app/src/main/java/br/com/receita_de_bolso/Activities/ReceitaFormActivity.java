@@ -295,10 +295,13 @@ public class ReceitaFormActivity extends AppCompatActivity {
                         cursor.close();
 
                         try {
-                            Bitmap bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                            this.receita.setImageBitmap(bmp);
-                            imageRecipe.setImageBitmap(bmp);
-                            Palette.from(bmp).maximumColorCount(32).generate(new Palette.PaletteAsyncListener() {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                            int novoHeight = bitmap.getHeight() / (bitmap.getWidth() / 400);
+                            Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, 400, novoHeight, true);
+
+                            this.receita.setImageBitmap(bitmapResized);
+                            imageRecipe.setImageBitmap(bitmapResized);
+                            Palette.from(bitmapResized).maximumColorCount(32).generate(new Palette.PaletteAsyncListener() {
                                 @Override
                                 public void onGenerated(Palette palette) {
                                     Palette.Swatch vibrant = palette.getVibrantSwatch();
@@ -320,13 +323,16 @@ public class ReceitaFormActivity extends AppCompatActivity {
                     Uri selectedImage = imageUri;
                     getContentResolver().notifyChange(selectedImage, null);
                     ContentResolver cr = getContentResolver();
-                    Bitmap bitmap;
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(cr, selectedImage);
 
-                        this.receita.setImageBitmap(bitmap);
-                        imageRecipe.setImageBitmap(bitmap);
-                        Palette.from(bitmap).maximumColorCount(32).generate(new Palette.PaletteAsyncListener() {
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, selectedImage);
+
+                        int novoHeight = bitmap.getHeight() / (bitmap.getWidth() / 400);
+
+                        Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, 400, novoHeight, true);
+                        this.receita.setImageBitmap(bitmapResized);
+                        imageRecipe.setImageBitmap(bitmapResized);
+                        Palette.from(bitmapResized).maximumColorCount(32).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(Palette palette) {
                                 Palette.Swatch vibrant = palette.getVibrantSwatch();
